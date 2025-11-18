@@ -4,6 +4,26 @@ import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
 
+// const express = require("express");
+// const mongoose = require("mongoose");
+// require("dotenv").config();
+
+// const app = express();
+// app.use(express.json());
+
+// mongoose.connect(process.env.MONGO_URI)
+//   .then(() => console.log("MongoDB Connected"))
+//   .catch((err) => console.log(err));
+
+// app.get("/", (req, res) => {
+//   res.send("Server running!");
+// });
+
+// app.listen(process.env.PORT, () => {
+//   console.log(`Server started on port ${process.env.PORT}`);
+// });
+
+
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <React.StrictMode>

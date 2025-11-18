@@ -1,38 +1,304 @@
+/* Custom scroll behavior */
+html {
+  scroll-behavior: smooth;
+}
+
+/* Performance optimizations */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* Base styles */
 .App {
-  text-align: center;
-}
-
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
-}
-
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
-  }
-}
-
-.App-header {
-  background-color: #282c34;
   min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  font-size: calc(10px + 2vmin);
-  color: white;
+  font-family: 'Inter', sans-serif;
 }
 
-.App-link {
-  color: #61dafb;
+/* Section spacing */
+section {
+  position: relative;
+  overflow: hidden;
 }
 
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
+/* Gradient backgrounds */
+.gradient-bg {
+  background: linear-gradient(135deg, #f6f7fc 0%, #ffffff 100%);
+}
+
+/* Animations */
+.hover-scale {
+  transition: transform 0.2s ease-in-out;
+}
+
+.hover-scale:hover {
+  transform: scale(1.05);
+}
+
+/* Custom scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: #f1f1f1;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #888;
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #555;
+}
+
+/* Button hover effects */
+.button-hover {
+  position: relative;
+  overflow: hidden;
+}
+
+.button-hover::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(255, 255, 255, 0.1);
+  transform: translateX(-100%);
+  transition: transform 0.3s ease-in-out;
+}
+
+.button-hover:hover::after {
+  transform: translateX(0);
+}
+
+/* Image hover effects */
+.image-hover {
+  transition: transform 0.3s ease, filter 0.3s ease;
+}
+
+.image-hover:hover {
+  transform: scale(1.05);
+  filter: brightness(1.1);
+}
+
+/* Card hover effects */
+.card-hover {
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.card-hover:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+}
+
+/* Responsive font sizes */
+@media (max-width: 640px) {
+  h1 {
+    font-size: 2rem;
   }
-  to {
-    transform: rotate(360deg);
+  h2 {
+    font-size: 1.5rem;
   }
+  p {
+    font-size: 1rem;
+  }
+}
+
+/* Add smooth transition for all interactive elements */
+a, button, input, textarea {
+  transition: all 0.2s ease-in-out;
+}
+
+/* GPU acceleration for animations */
+.transform,
+[style*="transform"],
+[style*="will-change"] {
+  will-change: transform;
+  transform: translateZ(0);
+  backface-visibility: hidden;
+  perspective: 1000px;
+}
+
+/* Optimize image rendering */
+img {
+  image-rendering: -webkit-optimize-contrast;
+  image-rendering: crisp-edges;
+}
+
+/* Optimize font rendering */
+body {
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+}
+
+/* ------------------------
+   Light / Dark theme support
+   We set `data-theme="dark"` on <html> (done in App.js). These rules
+   override common utility classes used across the codebase so the UI
+   visually switches even when Tailwind isn't active yet.
+   ------------------------ */
+
+html[data-theme="dark"] {
+  background-color: #0f172a;
+  color: #f1f5f9;
+}
+
+/* Override common background/text utility classes used in components */
+html[data-theme="dark"] .bg-white {
+  background-color: #1e293b !important;
+}
+
+html[data-theme="dark"] .bg-gray-50 {
+  background-color: #0f172a !important;
+}
+
+html[data-theme="dark"] .bg-gray-100 {
+  background-color: #334155 !important;
+}
+
+html[data-theme="dark"] .bg-gray-300 {
+  background-color: #475569 !important;
+}
+
+/* Navbar background override */
+html[data-theme="dark"] nav {
+  background-color: rgba(15, 23, 42, 0.95) !important;
+  backdrop-filter: blur(12px);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  color: #f1f5f9;
+}
+
+/* Text color overrides */
+html[data-theme="dark"] .text-gray-900 {
+  color: #f1f5f9 !important;
+}
+
+html[data-theme="dark"] .text-gray-800 {
+  color: #e2e8f0 !important;
+}
+
+html[data-theme="dark"] .text-gray-700 {
+  color: #cbd5e1 !important;
+}
+
+html[data-theme="dark"] .text-gray-600 {
+  color: #94a3b8 !important;
+}
+
+/* Card/shadow tweaks for dark */
+html[data-theme="dark"] .shadow-lg {
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5), 0 0 0 1px rgba(255, 255, 255, 0.05) !important;
+}
+
+/* Button styles in dark mode */
+html[data-theme="dark"] button.bg-blue-600 {
+  background-color: #3b82f6 !important;
+}
+
+html[data-theme="dark"] button.bg-blue-600:hover {
+  background-color: #2563eb !important;
+}
+
+/* Button hover backgrounds */
+html[data-theme="dark"] .hover\:bg-gray-100:hover {
+  background-color: rgba(255, 255, 255, 0.1) !important;
+}
+
+html[data-theme="dark"] .hover\:text-black:hover {
+  color: #f1f5f9 !important;
+}
+
+/* Link color for dark theme */
+html[data-theme="dark"] a {
+  color: #60a5fa;
+}
+
+html[data-theme="dark"] a:hover {
+  color: #93c5fd;
+}
+
+/* Input fields and forms */
+html[data-theme="dark"] input,
+html[data-theme="dark"] textarea {
+  background-color: #1e293b !important;
+  border-color: #334155 !important;
+  color: #f1f5f9 !important;
+}
+
+html[data-theme="dark"] input:focus,
+html[data-theme="dark"] textarea:focus {
+  border-color: #3b82f6 !important;
+}
+
+html[data-theme="dark"] input::placeholder,
+html[data-theme="dark"] textarea::placeholder {
+  color: #64748b !important;
+}
+
+/* Scrollbar for dark mode */
+html[data-theme="dark"] ::-webkit-scrollbar-track {
+  background: #0f172a;
+}
+
+html[data-theme="dark"] ::-webkit-scrollbar-thumb {
+  background: #334155;
+}
+
+html[data-theme="dark"] ::-webkit-scrollbar-thumb:hover {
+  background: #475569;
+}
+
+/* Technology tags/badges in dark mode */
+html[data-theme="dark"] .bg-gray-100.text-gray-800,
+html[data-theme="dark"] .bg-gray-100 .text-gray-800 {
+  background-color: #334155 !important;
+  color: #e2e8f0 !important;
+  border-color: #475569 !important;
+}
+
+/* Project card technology tags */
+html[data-theme="dark"] .bg-gray-100.text-gray-700 {
+  background-color: #334155 !important;
+  color: #cbd5e1 !important;
+}
+
+/* Social media icons background */
+html[data-theme="dark"] .bg-gray-100 {
+  background-color: #334155 !important;
+}
+
+html[data-theme="dark"] .bg-gray-100.text-gray-600:hover {
+  color: #60a5fa !important;
+}
+
+/* Skills progress bar background */
+html[data-theme="dark"] .bg-gray-200 {
+  background-color: #334155 !important;
+}
+
+/* Border colors */
+html[data-theme="dark"] .border-gray-200,
+html[data-theme="dark"] .border-gray-300 {
+  border-color: #475569 !important;
+}
+
+/* Label colors */
+html[data-theme="dark"] label.text-gray-700 {
+  color: #cbd5e1 !important;
+}
+
+/* Contact form labels and icons */
+html[data-theme="dark"] .text-gray-900.mb-6 {
+  color: #f1f5f9 !important;
 }

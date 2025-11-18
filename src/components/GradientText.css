@@ -1,0 +1,75 @@
+.animated-gradient-text {
+  position: relative;
+  display: inline-block;
+}
+
+.animated-gradient-text .text-content {
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  background-size: 200% auto;
+  animation: gradientFlow linear infinite;
+  padding: 0.25rem 0;
+}
+
+.animated-gradient-text .gradient-overlay {
+  position: absolute;
+  top: -2px;
+  left: -2px;
+  right: -2px;
+  bottom: -2px;
+  border-radius: 0.5rem;
+  opacity: 0.5;
+  background-size: 200% auto;
+  animation: gradientFlow linear infinite;
+  z-index: -1;
+}
+
+@keyframes gradientFlow {
+  0% {
+    background-position: 0% center;
+  }
+  100% {
+    background-position: 200% center;
+  }
+}
+
+/* Optional: Add hover effect to make gradient more vibrant */
+.animated-gradient-text:hover .text-content {
+  animation-duration: 3s !important;
+}
+
+.animated-gradient-text:hover .gradient-overlay {
+  animation-duration: 3s !important;
+  opacity: 0.7;
+}
+
+/* Responsive text size adjustments */
+@media (max-width: 640px) {
+  .animated-gradient-text {
+    font-size: 90%;
+  }
+}
+
+/* Respect reduced motion preferences */
+@media (prefers-reduced-motion: reduce) {
+  .animated-gradient-text .text-content,
+  .animated-gradient-text .gradient-overlay {
+    animation: none !important;
+  }
+  
+  .animated-gradient-text .text-content {
+    background-position: 0% center;
+  }
+  
+  .animated-gradient-text .gradient-overlay {
+    background-position: 0% center;
+  }
+}
+
+/* GPU acceleration */
+.animated-gradient-text .text-content,
+.animated-gradient-text .gradient-overlay {
+  will-change: background-position;
+  transform: translateZ(0);
+}
