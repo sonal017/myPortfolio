@@ -16,6 +16,12 @@ app.use((req, res, next) => {
   next();
 });
 
+// Startup header to clearly identify which backend is running
+console.log('=============================================');
+console.log('Starting backend: SQLite (local) server');
+console.log(`   Entry file: ${__filename}`);
+console.log('=============================================');
+
 // Initialize SQLite DB (file: server/messages.db)
 const dbPath = path.join(__dirname, 'messages.db');
 const db = new sqlite3.Database(dbPath, (err) => {

@@ -1,6 +1,53 @@
 # Backend Setup for Contact Form
 
-This backend server handles sending emails from your portfolio contact form.
+This backend server accepts contact form submissions and stores them in the configured database.
+
+## Setup Instructions
+
+1. Install dependencies
+
+```bash
+npm install
+```
+
+2. Create a `.env` file in the backend folder with at minimum:
+
+```env
+MONGO_URI=your-mongodb-connection-string
+PORT=5000
+```
+
+3. Start the server
+
+```bash
+npm run server
+```
+
+Or start both frontend and backend in development:
+
+```bash
+npm run dev
+```
+
+## API Endpoints
+
+- `POST /api/contact` — receives and stores a contact message
+- `GET /api/messages` — lists recent messages (for verification)
+- `GET /api/health` — health check
+
+## Notes
+
+- The backend stores messages in the database configured by `MONGO_URI`.
+- If you later want notifications (email), integrate a third-party email provider and add that functionality.
+
+## Troubleshooting
+
+- If messages are not saving, check that `MONGO_URI` contains a database name and that your DB allows connections from your IP (MongoDB Atlas network access).
+- Check server logs for detailed errors.
+```markdown
+# Backend Setup for Contact Form
+
+This backend server accepts contact form submissions and stores them in the configured database.
 
 ## Setup Instructions
 
@@ -12,156 +59,72 @@ npm install
 
 This will install:
 - `express` - Web server framework
-- `nodemailer` - Email sending library
 - `cors` - Enable CORS for frontend requests
 - `dotenv` - Environment variable management
 - `concurrently` - Run frontend and backend together (dev dependency)
 
-### 2. Configure Gmail for Sending Emails
+### 2. Create Environment File
 
-Since we're using Gmail, you need to set up an App Password:
-
-1. Go to your Google Account settings
-2. Enable 2-Step Verification (if not already enabled)
-3. Go to App Passwords: https://myaccount.google.com/apppasswords
-4. Select "Mail" and "Other (Custom name)"
-5. Name it "Portfolio Contact Form"
-6. Copy the generated 16-character password
-
-### 3. Create Environment File
-
-Create a `.env` file in the root directory:
+Create a `.env` file in the backend root directory containing at minimum the MongoDB connection and port:
 
 ```env
-EMAIL_USER=your-email@gmail.com
-EMAIL_PASS=your-16-character-app-password
-RECEIVER_EMAIL=your-email@gmail.com
+MONGO_URI=your-mongodb-connection-string
 PORT=5000
 ```
 
 **Important:** Never commit the `.env` file to git! It's already in `.gitignore`.
 
-### 4. Start the Server
+### 3. Start the Server
 
 #### Option A: Run Backend Only
 ```bash
 npm run server
+<!-- README cleaned: email sending removed; replaced with storage-only instructions -->
+# Backend Setup for Contact Form
+
+This backend server accepts contact form submissions and stores them in the configured database.
+
+## Setup Instructions
+
+1. Install dependencies
+
+```bash
+npm install
 ```
 
-#### Option B: Run Both Frontend and Backend (Development)
+2. Create a `.env` file in the backend folder with at minimum:
+
+```env
+MONGO_URI=your-mongodb-connection-string
+PORT=5000
+```
+
+3. Start the server
+
+```bash
+npm run server
+```
+
+Or start both frontend and backend in development:
+
 ```bash
 npm run dev
 ```
 
-This will start:
-- Backend server on `http://localhost:5000`
-- React frontend on `http://localhost:3000`
-
-### 5. Update Frontend API URL for Production
-
-When deploying, update the API URL in `src/components/contact.js`:
-
-Change:
-```javascript
-const response = await fetch('http://localhost:5000/api/contact', {
-```
-
-To your production backend URL:
-```javascript
-const response = await fetch('https://your-backend-domain.com/api/contact', {
-```
-
-Or use an environment variable:
-```javascript
-const API_URL = process.env.REACT_APP_API_URL || 'http://localhost:5000';
-const response = await fetch(`${API_URL}/api/contact`, {
-```
-
 ## API Endpoints
 
-### POST `/api/contact`
-Sends an email from the contact form.
+- `POST /api/contact` — receives and stores a contact message
+- `GET /api/messages` — lists recent messages (for verification)
+- `GET /api/health` — health check
 
-**Request Body:**
-```json
-{
-  "name": "John Doe",
-  "email": "john@example.com",
-  "message": "Hello, I'm interested in your work!"
-}
-```
+## Notes
 
-**Success Response:**
-```json
-{
-  "success": true,
-  "message": "Thank you! Your message has been sent successfully."
-}
-```
-
-**Error Response:**
-```json
-{
-  "success": false,
-  "message": "Error message here"
-}
-```
-
-### GET `/api/health`
-Health check endpoint to verify server is running.
-
-## Deployment Options
-
-### Option 1: Deploy Backend Separately
-- Deploy backend to services like:
-  - Heroku
-  - Railway
-  - Render
-  - Vercel (with serverless functions)
-  - AWS Lambda
-  - DigitalOcean App Platform
-
-### Option 2: Use Environment Variables
-For production, set environment variables in your hosting platform:
-- `EMAIL_USER`
-- `EMAIL_PASS`
-- `RECEIVER_EMAIL`
-- `PORT`
-
-## Alternative: Email Services
-
-Instead of Gmail, you can use:
-- **SendGrid** - Professional email service
-- **Mailgun** - Transactional email API
-- **AWS SES** - Amazon Simple Email Service
-- **Mailtrap** - For testing (doesn't send real emails)
-
-Update the transporter configuration in `server.js` for these services.
+- The backend stores messages in the database configured by `MONGO_URI`.
+- If you later want notifications (email), integrate a third-party email provider and add that functionality.
 
 ## Troubleshooting
 
-1. **"Authentication failed"**
-   - Make sure you're using an App Password, not your regular Gmail password
-   - Ensure 2-Step Verification is enabled
-
-2. **"Connection timeout"**
-   - Check if port 5000 is available
-   - Firewall may be blocking the connection
-
-3. **"CORS error"**
-   - Make sure `cors` middleware is installed
-   - Check if backend URL matches frontend fetch URL
-
-4. **Emails not received**
-   - Check spam folder
-   - Verify `RECEIVER_EMAIL` is correct
-   - Check server logs for errors
-
-## Security Notes
-
-- Never expose your `.env` file
-- Use App Passwords, not your main Gmail password
-- Consider rate limiting for production
-- Add CAPTCHA to prevent spam
-- Validate and sanitize all inputs
+- If messages are not saving, check that `MONGO_URI` contains a database name and that your DB allows connections from your IP (MongoDB Atlas network access).
+- Check server logs for detailed errors.
+This backend stores messages in the configured database. If you later want to add email notifications, integrate a transactional email service (SendGrid, Mailgun, AWS SES) and update the server accordingly.
 
