@@ -1,6 +1,6 @@
 import React, { useState, memo, useCallback } from 'react';
 import { motion, useReducedMotion } from 'framer-motion';
-import { FiMail, FiPhone, FiGithub, FiLinkedin, FiInstagram } from 'react-icons/fi';
+import { FiMail, FiPhone, FiGithub, FiLinkedin, FiInstagram, FiCheckCircle, FiX } from 'react-icons/fi';
 
 const Contact = memo(() => {
   const shouldReduceMotion = useReducedMotion();
@@ -46,6 +46,7 @@ const Contact = memo(() => {
           email: '',
           message: '',
         });
+        // Don't auto-clear success on modal — user closes it
       } else {
         setSubmitStatus({
           type: 'error',
@@ -68,12 +69,14 @@ const Contact = memo(() => {
       });
     } finally {
       setIsSubmitting(false);
-      // Clear status message after 5 seconds
-      setTimeout(() => {
-        setSubmitStatus({ type: null, message: '' });
-      }, 5000);
+      // Clear error status message after 5 seconds (not success — modal handles that)
+      if (submitStatus.type === 'error') {
+        setTimeout(() => {
+          setSubmitStatus({ type: null, message: '' });
+        }, 5000);
+      }
     }
-  }, [formData]);
+  }, [formData, submitStatus]);
 
   const handleChange = useCallback((e) => {
     setFormData((prev) => ({
@@ -139,8 +142,93 @@ const Contact = memo(() => {
         transition: { duration: 0.5 }
       };
 
+  // Success Modal Component
+  const SuccessModal = () => (
+    <motion.div
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      exit={{ opacity: 0 }}
+      className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50"
+      onClick={() => setSubmitStatus({ type: null, message: '' })}
+    >
+      <motion.div
+        initial={{ scale: 0.9, opacity: 0 }}
+        animate={{ scale: 1, opacity: 1 }}
+        exit={{ scale: 0.9, opacity: 0 }}
+        transition={{ type: 'spring', stiffness: 400, damping: 25 }}
+        className="bg-white dark:bg-slate-800 rounded-lg shadow-2xl max-w-md w-full p-8 text-center relative"
+        onClick={(e) => e.stopPropagation()}
+      >
+        {/* Close Button */}
+        <button
+          onClick={() => setSubmitStatus({ type: null, message: '' })}
+          className="absolute top-4 right-4 text-gray-400 hover:text-gray-600 dark:hover:text-gray-300 transition-colors"
+          aria-label="Close"
+        >
+          <FiX className="w-6 h-6" />
+        </button>
+
+        {/* Check Circle Icon */}
+        <motion.div
+          initial={{ scale: 0 }}
+          animate={{ scale: 1 }}
+          transition={{ delay: 0.1, type: 'spring', stiffness: 400, damping: 25 }}
+          className="flex justify-center mb-6"
+        >
+          <FiCheckCircle className="w-16 h-16 text-green-500" />
+        </motion.div>
+
+        {/* Title */}
+        <motion.h3
+          initial={{ opacity: 0, y: 10 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.2 }}
+          className="text-2xl font-bold text-gray-900 dark:text-white mb-3"
+        >
+          Thank you for reaching out!
+        </motion.h3>
+
+        {/* Message */}
+        <motion.p
+          initial={{ opacity: 0, y: 10 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.3 }}
+          className="text-gray-600 dark:text-slate-300 mb-6 leading-relaxed"
+        >
+          I've received your message and will get back to you as soon as possible.
+        </motion.p>
+
+        {/* Subtext */}
+        <motion.p
+          initial={{ opacity: 0, y: 10 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.4 }}
+          className="text-sm text-gray-500 dark:text-slate-400 mb-6"
+        >
+          In the meantime, feel free to reach out via email or any of my social links.
+        </motion.p>
+
+        {/* Close Button */}
+        <motion.button
+          initial={{ opacity: 0, y: 10 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.5 }}
+          whileHover={shouldReduceMotion ? {} : { scale: 1.05 }}
+          whileTap={shouldReduceMotion ? {} : { scale: 0.95 }}
+          onClick={() => setSubmitStatus({ type: null, message: '' })}
+          className="w-full py-2 px-4 bg-green-600 hover:bg-green-700 text-white font-medium rounded-md transition-colors"
+        >
+          Great!
+        </motion.button>
+      </motion.div>
+    </motion.div>
+  );
+
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      {/* Success Modal - only render when success */}
+      {submitStatus.type === 'success' && <SuccessModal />}
+
       <div className="text-center mb-16">
         <motion.h2
           {...titleAnimation}
