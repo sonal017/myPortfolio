@@ -68,7 +68,7 @@ const Header = memo(() => {
                 Node.js
               </motion.span>
             </div>
-            <div className="mt-8">
+            <div className="mt-8 flex flex-wrap gap-4">
               <Link to="projects" smooth={true} duration={500} offset={-80}>
                 <motion.button
                   whileHover={shouldReduceMotion ? {} : { scale: 1.05 }}
@@ -80,6 +80,17 @@ const Header = memo(() => {
                   View Projects
                 </motion.button>
               </Link>
+              <motion.a
+                href="https://drive.google.com/uc?export=download&id=1Bcz_eBJXtncLERQrnffb3BqmYpi2O9S2"
+                download="Sonalkumar_Singh_CV.pdf"
+                whileHover={shouldReduceMotion ? {} : { scale: 1.05 }}
+                whileTap={shouldReduceMotion ? {} : { scale: 0.95 }}
+                className="inline-flex items-center px-6 py-3 border border-blue-600 text-base font-medium rounded-md text-blue-600 dark:text-blue-400 dark:border-blue-400 hover:bg-blue-50 dark:hover:bg-slate-700 transition-colors"
+                style={{ willChange: 'transform' }}
+                aria-label="Download CV"
+              >
+               Download CV
+              </motion.a>
             </div>
           </motion.div>
 
