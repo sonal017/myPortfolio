@@ -95,14 +95,16 @@ const About = memo(() => {
             ))}
           </div>
 
-          {/* <motion.button
+          <motion.a
+            href="/Sonalkumar_CV2026.pdf"
+            download
             whileHover={shouldReduceMotion ? {} : { scale: 1.05 }}
             whileTap={shouldReduceMotion ? {} : { scale: 0.95 }}
             className="inline-flex items-center px-6 py-3 border border-gray-300 shadow-sm text-base font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 transition-colors"
             style={{ willChange: 'transform' }}
           >
             Download CV
-          </motion.button> */}
+          </motion.a>
         </motion.div>
 
         {/* Stats Grid */}
