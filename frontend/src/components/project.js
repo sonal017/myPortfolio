@@ -92,22 +92,37 @@ const Projects = () => {
   
   const projects = [
     {
-      title: 'Project 1',
-      description: 'A web application built with modern technologies that solves real-world problems.',
-      image: '/project1.jpg', // Add your project image
-      technologies: ['React', 'Node.js', 'MongoDB'],
-      liveDemo: 'https://your-project1-demo.com',
-      github: 'https://github.com/yourusername/project1'
+      title: 'Personal Portfolio Website',
+      description: 'A modern, responsive portfolio website featuring dark/light theme toggle, interactive animations, glassmorphic design, and smooth scroll navigation. Built with React, Tailwind CSS, and Framer Motion for seamless interactions.',
+      image: '/portfolio-preview.jpg',
+      technologies: ['React', 'Tailwind CSS', 'Framer Motion', 'Node.js', 'Express'],
+      liveDemo: 'https://sonalkumar-dev-portfolio.vercel.app',
+      github: 'https://github.com/sonalkumar/portfolio'
     },
     {
-      title: 'Project 2',
-      description: 'An innovative solution designed to enhance user experience and productivity.',
-      image: '/project2.jpg', // Add your project image
-      technologies: ['TypeScript', 'Express', 'PHP'],
-      liveDemo: 'https://your-project2-demo.com',
-      github: 'https://github.com/yourusername/project2'
+      title: 'Full-Stack Contact Management System',
+      description: 'A contact management application with backend API for storing and retrieving contact information. Features form validation, responsive design, and real-time data persistence with MongoDB.',
+      image: '/contact-system.jpg',
+      technologies: ['React', 'MongoDB', 'Express', 'Node.js', 'REST API'],
+      liveDemo: 'https://contact-manager-demo.vercel.app',
+      github: 'https://github.com/sonalkumar/contact-system'
     },
-    // Add more projects as needed
+    {
+      title: 'E-Commerce Product Showcase',
+      description: 'An interactive product showcase with filtering, sorting, and dynamic cart functionality. Demonstrates modern React patterns including hooks, context API, and component composition.',
+      image: '/ecommerce-shop.jpg',
+      technologies: ['React', 'JavaScript', 'CSS3', 'Local Storage'],
+      liveDemo: 'https://ecommerce-shop.vercel.app',
+      github: 'https://github.com/sonalkumar/ecommerce'
+    },
+    {
+      title: 'Weather Forecast Application',
+      description: 'Real-time weather application with geolocation support, responsive design, and beautiful UI. Integrates with weather API to display current conditions and forecasts.',
+      image: '/weather-app.jpg',
+      technologies: ['React', 'API Integration', 'Geolocation API', 'Tailwind CSS'],
+      liveDemo: 'https://weather-app.vercel.app',
+      github: 'https://github.com/sonalkumar/weather-app'
+    }
   ];
 
   const titleAnimation = shouldReduceMotion
@@ -123,7 +138,7 @@ const Projects = () => {
       <div className="text-center mb-16">
         <motion.h2
           {...titleAnimation}
-          className="text-3xl sm:text-4xl font-bold text-gray-900 mb-4"
+          className="text-3xl sm:text-4xl font-bold bg-gradient-to-r from-cyan-600 via-blue-600 to-purple-600 dark:from-cyan-300 dark:via-blue-400 dark:to-purple-400 bg-clip-text text-transparent mb-4"
         >
           Portfolio Showcase
         </motion.h2>

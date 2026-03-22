@@ -232,7 +232,7 @@ const Contact = memo(() => {
       <div className="text-center mb-16">
         <motion.h2
           {...titleAnimation}
-          className="text-3xl sm:text-4xl font-bold text-gray-900 mb-4"
+          className="text-3xl sm:text-4xl font-bold bg-gradient-to-r from-cyan-600 via-blue-600 to-purple-600 dark:from-cyan-300 dark:via-blue-400 dark:to-purple-400 bg-clip-text text-transparent mb-4"
         >
           Contact Me
         </motion.h2>

@@ -1,19 +1,42 @@
-import React, { useState, memo } from 'react';
+import React, { memo, useState } from 'react';
 import { motion, useReducedMotion } from 'framer-motion';
 import { Link } from 'react-scroll';
 import GradientText from './GradientText';
 
+const clamp = (value, min, max) => Math.max(min, Math.min(max, value));
+
 const Header = memo(() => {
   const shouldReduceMotion = useReducedMotion();
-  const [imageError, setImageError] = useState(false);
-  const [imageLoading, setImageLoading] = useState(true);
+  const [eyeOffset, setEyeOffset] = useState({ x: 0, y: 0 });
+  const [greeting, setGreeting] = useState('Hello there!');
 
-  const textAnimation = shouldReduceMotion
+  const handleMouseMove = (event) => {
+    const rect = event.currentTarget.getBoundingClientRect();
+    const x = event.clientX - (rect.left + rect.width / 2);
+    const y = event.clientY - (rect.top + rect.height / 2);
+    setEyeOffset({
+      x: clamp(x / 9, -8, 8),
+      y: clamp(y / 9, -8, 8),
+    });
+  };
+
+  const handleMouseLeave = () => {
+    setEyeOffset({ x: 0, y: 0 });
+  };
+
+  const handleStickerClick = () => {
+    setGreeting('👋 Hi! Thanks for checking out my portfolio!');
+    setTimeout(() => {
+      setGreeting('Hello there!');
+    }, 2500);
+  };
+
+  const fadeIn = shouldReduceMotion
     ? {}
     : {
         initial: { opacity: 0, y: 20 },
         animate: { opacity: 1, y: 0 },
-        transition: { duration: 0.5 }
+        transition: { duration: 0.6 },
       };
 
   const imageAnimation = shouldReduceMotion
@@ -30,7 +53,7 @@ const Header = memo(() => {
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
           {/* Text Content */}
           <motion.div
-            {...textAnimation}
+            {...fadeIn}
             className="text-left"
           >
             <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold mb-6">
@@ -94,38 +117,25 @@ const Header = memo(() => {
             </div>
           </motion.div>
 
-          {/* Image/Animation */}
           <motion.div
             {...imageAnimation}
             className="relative h-[400px] w-full"
             style={{ willChange: 'transform, opacity' }}
           >
             <div className="absolute inset-0 bg-gradient-to-r from-blue-500 to-purple-500 rounded-2xl opacity-10"></div>
-            <div className="absolute inset-0 flex items-center justify-center">
-              {imageLoading && !imageError && (
-                <div className="absolute inset-0 bg-gradient-to-r from-gray-200 via-gray-300 to-gray-200 animate-pulse rounded-2xl"></div>
-              )}
-              {!imageError ? (
-                <img
-                  src="/your-profile-image.jpg"
-                  alt="Sonalkumar Singh - Full Stack Developer"
-                  className={`rounded-2xl object-cover shadow-2xl transition-opacity duration-300 ${imageLoading ? 'opacity-0' : 'opacity-100'}`}
-                  style={{ maxHeight: '100%', maxWidth: '100%' }}
-                  loading="eager"
-                  onLoad={() => setImageLoading(false)}
-                  onError={() => {
-                    setImageError(true);
-                    setImageLoading(false);
-                  }}
-                />
-              ) : (
-                <div className="w-full h-full flex items-center justify-center bg-gradient-to-br from-blue-100 to-purple-100 rounded-2xl">
-                  <div className="text-center">
-                    <div className="text-6xl mb-4">👨‍💻</div>
-                    <p className="text-gray-600">Portfolio Image</p>
-                  </div>
+            <div className="absolute inset-0 flex items-center justify-center rounded-2xl">
+              <div
+                className="w-full h-full bg-white/10 rounded-xl backdrop-blur-lg p-4 flex flex-col items-center justify-center cursor-pointer"
+                onMouseMove={handleMouseMove}
+                onMouseLeave={handleMouseLeave}
+                onClick={handleStickerClick}
+              >
+                <div className="w-24 h-24 bg-gradient-to-br from-cyan-300 to-blue-600 rounded-full border-4 border-white shadow-lg flex items-center justify-center">
+                  <div className="relative w-8 h-8 bg-white rounded-full border-2 border-slate-600" style={{ transform: `translate(${eyeOffset.x}px, ${eyeOffset.y}px)` }}></div>
+                  <div className="relative w-8 h-8 bg-white rounded-full border-2 border-slate-600 ml-3" style={{ transform: `translate(${eyeOffset.x}px, ${eyeOffset.y}px)` }}></div>
                 </div>
-              )}
+                <p className="text-white font-semibold mt-3">{greeting}</p>
+              </div>
             </div>
           </motion.div>
         </div>
