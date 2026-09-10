@@ -19,6 +19,7 @@ html {
 .App {
   min-height: 100vh;
   font-family: 'Inter', sans-serif;
+  color: #0f172a;
 }
 
 /* Section spacing */
@@ -154,10 +155,9 @@ a, button, input, textarea {
   animation-delay: 4s;
 }
 
-/* Optimize image rendering */
+/* Keep project screenshots and visual assets natural. */
 img {
-  image-rendering: -webkit-optimize-contrast;
-  image-rendering: crisp-edges;
+  image-rendering: auto;
 }
 
 /* Optimize font rendering */
@@ -242,15 +242,6 @@ html[data-theme="dark"] .hover\:bg-gray-100:hover {
 
 html[data-theme="dark"] .hover\:text-black:hover {
   color: #f1f5f9 !important;
-}
-
-/* Link color for dark theme */
-html[data-theme="dark"] a {
-  color: #60a5fa;
-}
-
-html[data-theme="dark"] a:hover {
-  color: #93c5fd;
 }
 
 /* Input fields and forms */

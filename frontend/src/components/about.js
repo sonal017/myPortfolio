@@ -1,25 +1,51 @@
 import React, { memo } from 'react';
 import { motion, useReducedMotion } from 'framer-motion';
+import { FiAward, FiBookOpen, FiBriefcase, FiCheckCircle, FiCode, FiDownload, FiMapPin } from 'react-icons/fi';
 import './about.css';
 
 const About = memo(() => {
   const shouldReduceMotion = useReducedMotion();
 
-  
   const stats = [
-    { label: 'Total Projects', value: '4', description: 'Innovative web & mobile solutions crafted', icon: '📱' },
-    { label: 'Years of Experience', value: '2', description: 'Continuous learning journey', icon: '⚡' },
-    { label: 'Happy Clients', value: '5+', description: 'Successful project deliveries', icon: '😊' },
+    {
+      label: 'Featured Projects',
+      value: '4',
+      description: 'React, Node.js, API, commerce, and weather UI builds',
+      icon: <FiCode className="h-6 w-6" />,
+    },
+    {
+      label: 'Experience',
+      value: '1+ yr',
+      description: 'Hands-on full-stack development experience',
+      icon: <FiBriefcase className="h-6 w-6" />,
+    },
+    {
+      label: 'Current Focus',
+      value: 'MERN',
+      description: 'Building clean interfaces with practical backend APIs',
+      icon: <FiAward className="h-6 w-6" />,
+    },
+  ];
+
+  const profilePoints = [
+    'Build responsive React interfaces with clear component structure.',
+    'Create Express and MongoDB APIs for forms, dashboards, and data workflows.',
+    'Develop receipt generation and PDF-based workflows with backend API integration.',
+    'Build scheduling features with drag-and-drop interactions and timezone-aware logic.',
+    'Refactor reusable UI components to improve product consistency and development speed.',
+    'Implement profile, organization, and social account management flows with modal-based UI.',
+    'Care about clean UX, performance, accessibility, and maintainable code.',
   ];
 
   const experience = [
     {
       title: 'Full Stack Developer',
-      company: 'Salaried Position',
-      period: '2024 - Present',
-      description: 'Building modern web applications with React, Node.js, and MongoDB. Focusing on responsive, performant, accessible solutions with clean architecture and CI/CD process.',
-      skills: ['React', 'Node.js', 'Express', 'MongoDB', 'Tailwind CSS', 'REST APIs']
-    }
+      company: 'Digitrix Agency, Vasai',
+      period: 'Jun 2025 - Present',
+      description:
+        'Working on React-based product features including receipt generation, drag-and-drop scheduling, timezone-aware social planning, modal-based account flows, and reusable UI refactors.',
+      skills: ['React', 'React DnD', 'Node.js', 'Express', 'MongoDB', 'REST APIs'],
+    },
   ];
 
   const education = [
@@ -27,135 +53,147 @@ const About = memo(() => {
       degree: 'Bachelor of Information Technology',
       institution: 'Mumbai University',
       score: 'Graduated',
-      year: '2021-2024'
+      year: '2021 - 2024',
     },
     {
-      degree: 'HSC (12th) in Science',
+      degree: 'HSC Science',
       institution: 'Vartak College',
-      score: '91.83% [551/600]',
-      year: '2020-2021'
+      score: '91.83%',
+      year: '2020 - 2021',
     },
     {
-      degree: 'SSC (10th)',
+      degree: 'SSC',
       institution: 'Pancham High School',
-      score: '90.20% [451/500]',
-      year: '2018-2019'
-    }
+      score: '90.20%',
+      year: '2018 - 2019',
+    },
   ];
 
-  const titleAnimation = shouldReduceMotion
+  const fadeUp = shouldReduceMotion
     ? {}
     : {
-        initial: { opacity: 0, y: 20 },
+        initial: { opacity: 0, y: 24 },
         whileInView: { opacity: 1, y: 0 },
-        transition: { duration: 0.5 }
-      };
-
-  const leftAnimation = shouldReduceMotion
-    ? {}
-    : {
-        initial: { opacity: 0, x: -20 },
-        whileInView: { opacity: 1, x: 0 },
-        transition: { duration: 0.5 }
-      };
-
-  const rightAnimation = shouldReduceMotion
-    ? {}
-    : {
-        initial: { opacity: 0, x: 20 },
-        whileInView: { opacity: 1, x: 0 },
-        transition: { duration: 0.5 }
+        viewport: { once: true, margin: '-80px' },
+        transition: { duration: 0.5, ease: 'easeOut' },
       };
 
   return (
-    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-      <div className="text-center mb-16">
-        <motion.h2
-          {...titleAnimation}
-          className="text-3xl sm:text-4xl font-bold bg-gradient-to-r from-cyan-600 via-blue-600 to-purple-600 dark:from-cyan-300 dark:via-blue-400 dark:to-purple-400 bg-clip-text text-transparent mb-4"
-        >
-          About Me
-        </motion.h2>
-      </div>
+    <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+      <motion.div {...fadeUp} className="mx-auto max-w-3xl text-center">
+        <span className="text-sm font-bold uppercase tracking-[0.18em] text-cyan-600 dark:text-cyan-300">
+          About
+        </span>
+        <h2 className="mt-3 text-3xl font-bold tracking-tight text-slate-950 dark:text-white sm:text-4xl">
+          A developer focused on useful, polished web experiences.
+        </h2>
+        <p className="mt-4 text-lg leading-8 text-slate-600 dark:text-slate-300">
+          I enjoy building products that combine clear UI, dependable backend logic, and a smooth user journey from first click to final action.
+        </p>
+      </motion.div>
 
-      {/* Stats Grid */}
-      <motion.div
-        {...leftAnimation}
-        className="grid grid-cols-1 sm:grid-cols-3 gap-6 mb-16"
-      >
+      <motion.div {...fadeUp} className="mt-12 grid grid-cols-1 gap-5 sm:grid-cols-3">
         {stats.map((stat) => (
-          <motion.div
+          <div
             key={stat.label}
-            className="h-48 bg-gradient-to-br from-white to-gray-50 dark:from-slate-800 dark:to-slate-900 rounded-xl shadow-xl p-6 text-center flex flex-col items-center justify-center border border-gray-200 dark:border-slate-700"
+            className="rounded-lg border border-slate-200 bg-white p-6 shadow-sm dark:border-slate-800 dark:bg-slate-900"
           >
-            <div className="text-4xl mb-2">{stat.icon}</div>
-            <dt className="text-4xl font-bold bg-gradient-to-r from-cyan-600 to-blue-600 dark:from-cyan-400 dark:to-blue-400 bg-clip-text text-transparent mb-2">{stat.value}</dt>
-            <dd className="text-sm font-semibold text-gray-900 dark:text-white mb-3">{stat.label}</dd>
-            <p className="text-xs text-gray-600 dark:text-gray-300">{stat.description}</p>
-          </motion.div>
+            <div className="flex h-11 w-11 items-center justify-center rounded-md bg-cyan-50 text-cyan-700 dark:bg-cyan-950/60 dark:text-cyan-300">
+              {stat.icon}
+            </div>
+            <p className="mt-5 text-3xl font-bold text-slate-950 dark:text-white">{stat.value}</p>
+            <h3 className="mt-1 font-semibold text-slate-900 dark:text-slate-100">{stat.label}</h3>
+            <p className="mt-2 text-sm leading-6 text-slate-600 dark:text-slate-400">{stat.description}</p>
+          </div>
         ))}
       </motion.div>
 
-      {/* Work Experience & Personal Info - Flip Cards */}
-      <motion.div {...rightAnimation} className="mb-16">
-        <h3 className="text-2xl font-bold text-gray-900 dark:text-white mb-8 text-center">Experience & Background</h3>
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 perspective max-w-7xl mx-auto">
-          <div className="space-y-8">
-            {experience.map((job) => (
-              <div key={job.title} className="min-h-[20rem] bg-gradient-to-br from-slate-900 via-indigo-900 to-purple-900 rounded-2xl shadow-2xl border border-indigo-700 p-6 text-white">
-                <h4 className="text-2xl font-bold mb-2">{job.title}</h4>
-                <p className="text-cyan-300 font-semibold mb-1">{job.company}</p>
-                <p className="text-sm text-slate-300 mb-4">{job.period}</p>
-                <p className="text-slate-200 mb-4">{job.description}</p>
-                <div className="flex flex-wrap gap-2">
-                  {job.skills.map((skill) => (
-                    <span key={skill} className="text-xs font-medium px-2 py-1 rounded-full bg-cyan-800/40 text-cyan-100">{skill}</span>
-                  ))}
-                </div>
+      <div className="mt-14 grid grid-cols-1 gap-8 lg:grid-cols-[0.95fr_1.05fr]">
+        <motion.div
+          {...fadeUp}
+          className="rounded-lg border border-slate-200 bg-white p-7 shadow-sm dark:border-slate-800 dark:bg-slate-900"
+        >
+          <div className="flex items-center gap-3">
+            <div className="flex h-11 w-11 items-center justify-center rounded-md bg-slate-950 text-white dark:bg-white dark:text-slate-950">
+              <FiMapPin className="h-5 w-5" />
+            </div>
+            <div>
+              <h3 className="text-xl font-bold text-slate-950 dark:text-white">Profile Snapshot</h3>
+              <p className="text-sm text-slate-500 dark:text-slate-400">Mumbai, India</p>
+            </div>
+          </div>
+
+          <div className="mt-7 space-y-4">
+            {profilePoints.map((point) => (
+              <div key={point} className="flex gap-3">
+                <FiCheckCircle className="mt-1 h-5 w-5 flex-none text-emerald-500" />
+                <p className="leading-7 text-slate-600 dark:text-slate-300">{point}</p>
               </div>
             ))}
           </div>
 
-          <div className="bg-gradient-to-br from-slate-900 via-indigo-900 to-purple-900 rounded-2xl p-6 shadow-2xl border border-indigo-700 text-white">
-            <h4 className="text-xl font-bold mb-4">Personal Info & Education</h4>
-            <div className="space-y-4 text-sm">
-              <div className="bg-white/10 p-4 rounded-xl">
-                <p className="font-semibold">Name</p>
-                <p>Sonalkumar Singh</p>
-                <p className="mt-1 font-semibold">DOB</p>
-                <p>17/02/2003</p>
-                <p className="mt-1 font-semibold">Status</p>
-                <p>Salaried Full Stack Developer</p>
+          <a
+            href="/Sonalkumar_CV2026.pdf"
+            download
+            className="mt-8 inline-flex items-center gap-2 rounded-md bg-slate-950 px-5 py-3 font-semibold text-white shadow-lg shadow-slate-900/15 transition-colors hover:bg-slate-800 dark:bg-white dark:text-slate-950 dark:hover:bg-slate-200"
+          >
+            <FiDownload className="h-5 w-5" />
+            Download CV
+          </a>
+        </motion.div>
+
+        <motion.div {...fadeUp} className="space-y-6">
+          {experience.map((job) => (
+            <article
+              key={job.title}
+              className="rounded-lg border border-slate-200 bg-white p-7 shadow-sm dark:border-slate-800 dark:bg-slate-900"
+            >
+              <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
+                <div>
+                  <h3 className="text-2xl font-bold text-slate-950 dark:text-white">{job.title}</h3>
+                  <p className="mt-1 font-semibold text-cyan-700 dark:text-cyan-300">{job.company}</p>
+                </div>
+                <span className="rounded-md bg-slate-100 px-3 py-2 text-sm font-semibold text-slate-600 dark:bg-slate-800 dark:text-slate-300">
+                  {job.period}
+                </span>
               </div>
 
-              <div className="bg-white/10 p-4 rounded-xl">
-                <h5 className="font-semibold mb-2">Education</h5>
-                {education.map((edu, idx) => (
-                  <div key={idx} className="mb-3">
-                    <p className="font-semibold">{edu.degree}</p>
-                    <p>{edu.institution}</p>
-                    <p className="text-xs text-slate-200">{edu.score} • {edu.year}</p>
-                  </div>
+              <p className="mt-5 leading-7 text-slate-600 dark:text-slate-300">{job.description}</p>
+              <div className="mt-5 flex flex-wrap gap-2">
+                {job.skills.map((skill) => (
+                  <span
+                    key={skill}
+                    className="rounded-md border border-slate-200 bg-slate-50 px-3 py-1.5 text-sm font-medium text-slate-700 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-200"
+                  >
+                    {skill}
+                  </span>
                 ))}
               </div>
-            </div>
-          </div>
-        </div>
-      </motion.div>
+            </article>
+          ))}
 
-      {/* Download CV Button */}
-      <motion.div className="text-center">
-        <motion.a
-          href="/Sonalkumar_CV2026.pdf"
-          download
-          whileHover={shouldReduceMotion ? {} : { scale: 1.05 }}
-          whileTap={shouldReduceMotion ? {} : { scale: 0.95 }}
-          className="inline-flex items-center px-8 py-3 text-base font-semibold rounded-xl text-white bg-gradient-to-r from-cyan-500 via-blue-600 to-indigo-600 hover:from-cyan-400 hover:via-blue-500 hover:to-indigo-700 transition-all shadow-xl border border-cyan-400"
-          style={{ willChange: 'transform' }}
-        >
-          📥 Download CV
-        </motion.a>
-      </motion.div>
+          <article className="rounded-lg border border-slate-200 bg-white p-7 shadow-sm dark:border-slate-800 dark:bg-slate-900">
+            <div className="flex items-center gap-3">
+              <div className="flex h-11 w-11 items-center justify-center rounded-md bg-cyan-50 text-cyan-700 dark:bg-cyan-950/60 dark:text-cyan-300">
+                <FiBookOpen className="h-5 w-5" />
+              </div>
+              <h3 className="text-xl font-bold text-slate-950 dark:text-white">Education</h3>
+            </div>
+
+            <div className="mt-6 space-y-5">
+              {education.map((edu) => (
+                <div key={`${edu.degree}-${edu.year}`} className="border-l-2 border-slate-200 pl-4 dark:border-slate-700">
+                  <h4 className="font-semibold text-slate-950 dark:text-white">{edu.degree}</h4>
+                  <p className="mt-1 text-slate-600 dark:text-slate-300">{edu.institution}</p>
+                  <p className="mt-1 text-sm font-medium text-slate-500 dark:text-slate-400">
+                    {edu.score} / {edu.year}
+                  </p>
+                </div>
+              ))}
+            </div>
+          </article>
+        </motion.div>
+      </div>
     </div>
   );
 });

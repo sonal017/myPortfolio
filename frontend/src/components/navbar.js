@@ -1,8 +1,7 @@
 import React, { useState, memo, useCallback } from 'react';
 import { FaGithub, FaLinkedin, FaInstagram } from 'react-icons/fa';
-import { FiMoon, FiSun } from 'react-icons/fi';
+import { FiMenu, FiMoon, FiSun, FiX } from 'react-icons/fi';
 import { Link } from 'react-scroll';
-import GradientText from './GradientText';
 
 const Navbar = memo(({ theme = 'light', toggleTheme = () => {} }) => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -20,67 +19,71 @@ const Navbar = memo(({ theme = 'light', toggleTheme = () => {} }) => {
   ];
 
   const socialLinks = [
-    { 
-      icon: <FaGithub className="w-6 h-6" />, 
-      url: 'https://github.com/sonal017'
+    {
+      label: 'GitHub',
+      icon: <FaGithub className="h-5 w-5" />,
+      url: 'https://github.com/sonal017',
     },
-    { 
-      icon: <FaLinkedin className="w-6 h-6" />, 
-      url: 'https://www.linkedin.com/in/sonalkumar-singh-a8b230294'
+    {
+      label: 'LinkedIn',
+      icon: <FaLinkedin className="h-5 w-5" />,
+      url: 'https://www.linkedin.com/in/sonalkumar-singh-a8b230294',
     },
-    { 
-      icon: <FaInstagram className="w-6 h-6" />, 
-      url: 'https://www.instagram.com/sonal_._singh_'
+    {
+      label: 'Instagram',
+      icon: <FaInstagram className="h-5 w-5" />,
+      url: 'https://www.instagram.com/sonal_._singh_',
     },
   ];
 
-  // Show moon icon when current theme is light (so user can switch to night)
-  // Show sun icon when current theme is dark (so user can switch to light)
   const ThemeIcon = theme === 'light' ? FiMoon : FiSun;
+  const MenuIcon = isMenuOpen ? FiX : FiMenu;
 
   return (
-    <nav className="fixed w-full bg-white/80 dark:bg-slate-900/95 backdrop-blur-sm shadow-lg z-50 border-b border-gray-200 dark:border-slate-700">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex items-center justify-between h-16">
-          {/* Logo */}
-          <div className="flex-shrink-0">
-            <Link to="home" smooth={true} duration={500} className="text-xl font-bold cursor-pointer">
-              <GradientText
-                colors={['#3b82f6', '#10b981', '#3b82f6']}
-                animationSpeed={6}
-                className="font-bold"
+    <nav className="fixed inset-x-0 top-0 z-50 border-b border-slate-200/80 bg-white/90 backdrop-blur-xl shadow-sm dark:border-slate-800 dark:bg-slate-950/90">
+      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+        <div className="flex h-16 items-center justify-between">
+          <Link
+            to="home"
+            smooth
+            duration={500}
+            className="group flex cursor-pointer items-center gap-3"
+            onClick={() => setIsMenuOpen(false)}
+          >
+            <img
+              src="/logo192.png"
+              alt="Sonalkumar Singh logo"
+              className="h-10 w-10 rounded-md bg-white object-cover shadow-sm ring-1 ring-slate-200 dark:ring-slate-800"
+            />
+            <span className="text-lg font-bold tracking-tight text-slate-950 dark:text-white">
+              Sonalkumar Singh
+            </span>
+          </Link>
+
+          <div className="hidden items-center gap-1 md:flex">
+            {menuItems.map((item) => (
+              <Link
+                key={item.name}
+                to={item.to}
+                smooth
+                duration={500}
+                offset={-72}
+                className="cursor-pointer rounded-md px-3 py-2 text-sm font-medium text-slate-600 transition-colors hover:bg-slate-100 hover:text-slate-950 dark:text-slate-300 dark:hover:bg-slate-900 dark:hover:text-white"
               >
-                Sonallkumar Singh
-              </GradientText>
-            </Link>
+                {item.name}
+              </Link>
+            ))}
           </div>
 
-          {/* Desktop Menu */}
-          <div className="hidden md:block">
-            <div className="ml-10 flex items-baseline space-x-4">
-              {menuItems.map((item) => (
-                <Link
-                  key={item.name}
-                  to={item.to}
-                  smooth={true}
-                  duration={500}
-                  className="px-3 py-2 rounded-md text-sm font-medium text-gray-700 dark:text-slate-300 hover:text-black dark:hover:text-white hover:bg-gray-100 dark:hover:bg-slate-800 cursor-pointer transition-colors"
-                >
-                  {item.name}
-                </Link>
-              ))}
-            </div>
-          </div>
-
-          {/* Social Links + Theme Toggle */}
-          <div className="hidden md:flex items-center space-x-4">
-            {socialLinks.map((link, index) => (
+          <div className="hidden items-center gap-2 md:flex">
+            {socialLinks.map((link) => (
               <a
-                key={index}
+                key={link.label}
                 href={link.url}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="text-gray-700 dark:text-slate-300 hover:text-black dark:hover:text-white transition-colors"
+                aria-label={`Open ${link.label}`}
+                className="rounded-md p-2 text-slate-600 transition-colors hover:bg-slate-100 hover:text-slate-950 dark:text-slate-300 dark:hover:bg-slate-900 dark:hover:text-white"
               >
                 {link.icon}
               </a>
@@ -88,84 +91,70 @@ const Navbar = memo(({ theme = 'light', toggleTheme = () => {} }) => {
 
             <button
               onClick={toggleTheme}
-              aria-label="Toggle theme"
-              className="p-2 rounded-md text-gray-700 dark:text-slate-300 hover:text-black dark:hover:text-white hover:bg-gray-100 dark:hover:bg-slate-800 transition-colors"
+              aria-label="Toggle color theme"
+              className="rounded-md p-2 text-slate-600 transition-colors hover:bg-slate-100 hover:text-slate-950 dark:text-slate-300 dark:hover:bg-slate-900 dark:hover:text-white"
+              type="button"
             >
-              <ThemeIcon className="w-5 h-5" />
+              <ThemeIcon className="h-5 w-5" />
             </button>
           </div>
 
-          {/* Mobile menu button */}
-          <div className="md:hidden flex items-center space-x-2">
+          <div className="flex items-center gap-2 md:hidden">
             <button
               onClick={toggleTheme}
-              aria-label="Toggle theme"
-              className="p-2 rounded-md text-gray-700 dark:text-slate-300 hover:text-black dark:hover:text-white hover:bg-gray-100 dark:hover:bg-slate-800 transition-colors"
+              aria-label="Toggle color theme"
+              className="rounded-md p-2 text-slate-700 transition-colors hover:bg-slate-100 dark:text-slate-300 dark:hover:bg-slate-900"
+              type="button"
             >
-              <ThemeIcon className="w-5 h-5" />
+              <ThemeIcon className="h-6 w-6" />
             </button>
-
-            <div>
-              <button
-                onClick={toggleMenu}
-                className="inline-flex items-center justify-center p-2 rounded-md text-gray-700 dark:text-slate-300 hover:text-black dark:hover:text-white hover:bg-gray-100 dark:hover:bg-slate-800 transition-colors"
-              >
-                <svg
-                  className={`h-6 w-6 ${isMenuOpen ? 'hidden' : 'block'}`}
-                  xmlns="http://www.w3.org/2000/svg"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  stroke="currentColor"
-                >
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
-                </svg>
-                <svg
-                  className={`h-6 w-6 ${isMenuOpen ? 'block' : 'hidden'}`}
-                  xmlns="http://www.w3.org/2000/svg"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  stroke="currentColor"
-                >
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-                </svg>
-              </button>
-            </div>
+            <button
+              onClick={toggleMenu}
+              aria-label="Toggle navigation menu"
+              aria-expanded={isMenuOpen}
+              className="rounded-md p-2 text-slate-700 transition-colors hover:bg-slate-100 dark:text-slate-300 dark:hover:bg-slate-900"
+              type="button"
+            >
+              <MenuIcon className="h-7 w-7" />
+            </button>
           </div>
         </div>
       </div>
 
-      {/* Mobile menu */}
-      <div className={`md:hidden ${isMenuOpen ? 'block' : 'hidden'}`}>
-        <div className="px-2 pt-2 pb-3 space-y-1 sm:px-3">
-          {menuItems.map((item) => (
-            <Link
-              key={item.name}
-              to={item.to}
-              smooth={true}
-              duration={500}
-              className="block px-3 py-2 rounded-md text-base font-medium text-gray-700 dark:text-slate-300 hover:text-black dark:hover:text-white hover:bg-gray-100 dark:hover:bg-slate-800 cursor-pointer transition-colors"
-              onClick={() => setIsMenuOpen(false)}
-            >
-              {item.name}
-            </Link>
-          ))}
-        </div>
-        <div className="px-5 pt-4 pb-6 space-y-4">
-          <div className="flex space-x-4">
-            {socialLinks.map((link, index) => (
+      {isMenuOpen && (
+        <div className="border-t border-slate-200 bg-white px-4 py-4 shadow-lg dark:border-slate-800 dark:bg-slate-950 md:hidden">
+          <div className="space-y-1">
+            {menuItems.map((item) => (
+              <Link
+                key={item.name}
+                to={item.to}
+                smooth
+                duration={500}
+                offset={-72}
+                className="block cursor-pointer rounded-md px-3 py-3 text-base font-semibold text-slate-700 transition-colors hover:bg-slate-100 hover:text-slate-950 dark:text-slate-200 dark:hover:bg-slate-900 dark:hover:text-white"
+                onClick={() => setIsMenuOpen(false)}
+              >
+                {item.name}
+              </Link>
+            ))}
+          </div>
+
+          <div className="mt-4 flex gap-2 border-t border-slate-200 pt-4 dark:border-slate-800">
+            {socialLinks.map((link) => (
               <a
-                key={index}
+                key={link.label}
                 href={link.url}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="text-gray-700 dark:text-slate-300 hover:text-black dark:hover:text-white transition-colors"
+                aria-label={`Open ${link.label}`}
+                className="rounded-md bg-slate-100 p-3 text-slate-700 transition-colors hover:text-slate-950 dark:bg-slate-900 dark:text-slate-300 dark:hover:text-white"
               >
                 {link.icon}
               </a>
             ))}
           </div>
         </div>
-      </div>
+      )}
     </nav>
   );
 });

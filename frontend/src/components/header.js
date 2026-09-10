@@ -1,140 +1,156 @@
-import React, { memo, useState } from 'react';
+import React, { memo } from 'react';
 import { motion, useReducedMotion } from 'framer-motion';
 import { Link } from 'react-scroll';
-import GradientText from './GradientText';
-
-const clamp = (value, min, max) => Math.max(min, Math.min(max, value));
+import { FiArrowRight, FiCheckCircle, FiDownload, FiMail } from 'react-icons/fi';
+import { SiMongodb, SiNodedotjs, SiReact, SiTailwindcss } from 'react-icons/si';
 
 const Header = memo(() => {
   const shouldReduceMotion = useReducedMotion();
-  const [eyeOffset, setEyeOffset] = useState({ x: 0, y: 0 });
-  const [greeting, setGreeting] = useState('Hello there!');
 
-  const handleMouseMove = (event) => {
-    const rect = event.currentTarget.getBoundingClientRect();
-    const x = event.clientX - (rect.left + rect.width / 2);
-    const y = event.clientY - (rect.top + rect.height / 2);
-    setEyeOffset({
-      x: clamp(x / 9, -8, 8),
-      y: clamp(y / 9, -8, 8),
-    });
-  };
-
-  const handleMouseLeave = () => {
-    setEyeOffset({ x: 0, y: 0 });
-  };
-
-  const handleStickerClick = () => {
-    setGreeting('👋 Hi! Thanks for checking out my portfolio!');
-    setTimeout(() => {
-      setGreeting('Hello there!');
-    }, 2500);
-  };
-
-  const fadeIn = shouldReduceMotion
+  const fadeUp = shouldReduceMotion
     ? {}
     : {
-        initial: { opacity: 0, y: 20 },
+        initial: { opacity: 0, y: 24 },
         animate: { opacity: 1, y: 0 },
-        transition: { duration: 0.6 },
+        transition: { duration: 0.55, ease: 'easeOut' },
       };
 
-  const imageAnimation = shouldReduceMotion
+  const visualAnimation = shouldReduceMotion
     ? {}
     : {
-        initial: { opacity: 0, scale: 0.95 },
-        animate: { opacity: 1, scale: 1 },
-        transition: { duration: 0.5 }
+        initial: { opacity: 0, y: 28, scale: 0.98 },
+        animate: { opacity: 1, y: 0, scale: 1 },
+        transition: { duration: 0.65, delay: 0.12, ease: 'easeOut' },
       };
+
+  const techStack = [
+    { name: 'React', icon: <SiReact className="h-4 w-4" /> },
+    { name: 'Node.js', icon: <SiNodedotjs className="h-4 w-4" /> },
+    { name: 'MongoDB', icon: <SiMongodb className="h-4 w-4" /> },
+    { name: 'Tailwind', icon: <SiTailwindcss className="h-4 w-4" /> },
+  ];
+
+  const stats = [
+    { value: '4', label: 'Featured projects' },
+    { value: '1+ yr', label: 'Hands-on experience' },
+    { value: 'MERN', label: 'Primary stack' },
+  ];
 
   return (
-    <div className="min-h-screen flex items-center justify-center px-4 sm:px-6 lg:px-8">
-      <div className="max-w-7xl mx-auto py-20 sm:py-24 lg:py-32">
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
-          {/* Text Content */}
-          <motion.div
-            {...fadeIn}
-            className="text-left"
-          >
-            <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold mb-6">
-              <GradientText
-                colors={['#3b82f6', '#10b981', '#3b82f6']}
-                animationSpeed={6}
-                className="font-bold"
-              >
-                Full Stack Developer
-              </GradientText>
-            </h1>
-            <p className="text-lg sm:text-xl text-gray-600 mb-8">
-              Enhancing digital experiences that are smooth, scalable, and made to impress.
-            </p>
-            <div className="flex flex-wrap gap-4">
-              <motion.span
-                className="px-4 py-2 bg-gray-100 dark:bg-slate-700 rounded-full text-gray-800 dark:text-slate-200 text-sm font-medium border border-gray-200 dark:border-slate-600"
-                whileHover={shouldReduceMotion ? {} : { scale: 1.05 }}
-                whileTap={shouldReduceMotion ? {} : { scale: 0.95 }}
-              >
-                React
-              </motion.span>
-              <motion.span
-                className="px-4 py-2 bg-gray-100 dark:bg-slate-700 rounded-full text-gray-800 dark:text-slate-200 text-sm font-medium border border-gray-200 dark:border-slate-600"
-                whileHover={shouldReduceMotion ? {} : { scale: 1.05 }}
-                whileTap={shouldReduceMotion ? {} : { scale: 0.95 }}
-              >
-                JavaScript
-              </motion.span>
-              <motion.span
-                className="px-4 py-2 bg-gray-100 dark:bg-slate-700 rounded-full text-gray-800 dark:text-slate-200 text-sm font-medium border border-gray-200 dark:border-slate-600"
-                whileHover={shouldReduceMotion ? {} : { scale: 1.05 }}
-                whileTap={shouldReduceMotion ? {} : { scale: 0.95 }}
-              >
-                Node.js
-              </motion.span>
+    <div className="relative min-h-screen overflow-hidden bg-white pt-28 dark:bg-slate-950 sm:pt-32">
+      <div className="absolute inset-x-0 top-16 h-px bg-gradient-to-r from-transparent via-cyan-300 to-transparent dark:via-cyan-900" />
+
+      <div className="mx-auto flex min-h-[calc(100vh-7rem)] max-w-7xl items-center px-4 pb-20 sm:px-6 lg:px-8">
+        <div className="grid w-full items-center gap-12 lg:grid-cols-[1fr_0.95fr]">
+          <motion.div {...fadeUp} className="max-w-3xl">
+            <div className="mb-6 inline-flex items-center gap-2 rounded-md border border-emerald-200 bg-emerald-50 px-3 py-2 text-sm font-semibold text-emerald-700 dark:border-emerald-900/70 dark:bg-emerald-950/40 dark:text-emerald-300">
+              <span className="h-2 w-2 rounded-full bg-emerald-500" />
+              Available for full-stack roles and freelance work
             </div>
-            <div className="mt-8 flex flex-wrap gap-4">
-              <Link to="projects" smooth={true} duration={500} offset={-80}>
+
+            <h1 className="text-4xl font-extrabold tracking-tight text-slate-950 dark:text-white sm:text-5xl lg:text-6xl">
+              Hi, I&apos;m Sonalkumar Singh. I build full-stack web apps that feel fast and reliable.
+            </h1>
+
+            <p className="mt-6 max-w-2xl text-lg leading-8 text-slate-600 dark:text-slate-300 sm:text-xl">
+              I turn product ideas into responsive React interfaces, clean Node.js APIs, and practical user experiences that are easy to use and maintain.
+            </p>
+
+            <div className="mt-8 flex flex-wrap gap-3">
+              {techStack.map((tech) => (
+                <span
+                  key={tech.name}
+                  className="inline-flex items-center gap-2 rounded-md border border-slate-200 bg-white px-3 py-2 text-sm font-semibold text-slate-700 shadow-sm dark:border-slate-700 dark:bg-slate-900 dark:text-slate-200"
+                >
+                  <span className="text-cyan-600 dark:text-cyan-300">{tech.icon}</span>
+                  {tech.name}
+                </span>
+              ))}
+            </div>
+
+            <div className="mt-9 flex flex-col gap-4 sm:flex-row sm:flex-wrap">
+              <Link to="projects" smooth duration={500} offset={-72} className="w-full sm:w-auto">
                 <motion.button
-                  whileHover={shouldReduceMotion ? {} : { scale: 1.05 }}
-                  whileTap={shouldReduceMotion ? {} : { scale: 0.95 }}
-                  className="inline-flex items-center px-6 py-3 border border-transparent text-base font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700 transition-colors"
-                  style={{ willChange: 'transform' }}
-                  aria-label="Navigate to projects section"
+                  whileHover={shouldReduceMotion ? {} : { y: -2 }}
+                  whileTap={shouldReduceMotion ? {} : { scale: 0.98 }}
+                  className="inline-flex w-full items-center justify-center gap-2 rounded-md bg-slate-950 px-6 py-3 text-base font-semibold text-white shadow-lg shadow-slate-900/15 transition-colors hover:bg-slate-800 dark:bg-white dark:text-slate-950 dark:hover:bg-slate-200 sm:w-auto"
+                  type="button"
                 >
                   View Projects
+                  <FiArrowRight className="h-5 w-5" />
                 </motion.button>
               </Link>
+
               <motion.a
-                href="https://drive.google.com/uc?export=download&id=1Bcz_eBJXtncLERQrnffb3BqmYpi2O9S2"
-                download="Sonalkumar_Singh_CV.pdf"
-                whileHover={shouldReduceMotion ? {} : { scale: 1.05 }}
-                whileTap={shouldReduceMotion ? {} : { scale: 0.95 }}
-                className="inline-flex items-center px-6 py-3 border border-blue-600 text-base font-medium rounded-md text-blue-600 dark:text-blue-400 dark:border-blue-400 hover:bg-blue-50 dark:hover:bg-slate-700 transition-colors"
-                style={{ willChange: 'transform' }}
-                aria-label="Download CV"
+                href="/Sonalkumar_CV2026.pdf"
+                download
+                whileHover={shouldReduceMotion ? {} : { y: -2 }}
+                whileTap={shouldReduceMotion ? {} : { scale: 0.98 }}
+                className="inline-flex w-full items-center justify-center gap-2 rounded-md border border-slate-300 bg-white px-6 py-3 text-base font-semibold text-slate-800 shadow-sm transition-colors hover:border-slate-950 hover:text-slate-950 dark:border-slate-700 dark:bg-slate-900 dark:text-slate-100 dark:hover:border-slate-400 sm:w-auto"
               >
-               Download CV
+                <FiDownload className="h-5 w-5" />
+                Download CV
               </motion.a>
+
+              <Link to="contact" smooth duration={500} offset={-72} className="w-full sm:w-auto">
+                <motion.button
+                  whileHover={shouldReduceMotion ? {} : { y: -2 }}
+                  whileTap={shouldReduceMotion ? {} : { scale: 0.98 }}
+                  className="inline-flex w-full items-center justify-center gap-2 rounded-md px-4 py-3 text-base font-semibold text-slate-600 transition-colors hover:bg-slate-100 hover:text-slate-950 dark:text-slate-300 dark:hover:bg-slate-900 dark:hover:text-white sm:w-auto"
+                  type="button"
+                >
+                  <FiMail className="h-5 w-5" />
+                  Contact Me
+                </motion.button>
+              </Link>
             </div>
+
+            <dl className="mt-10 grid max-w-xl grid-cols-3 gap-3">
+              {stats.map((stat) => (
+                <div
+                  key={stat.label}
+                  className="rounded-lg border border-slate-200 bg-slate-50 p-4 dark:border-slate-800 dark:bg-slate-900/70"
+                >
+                  <dt className="text-sm font-medium text-slate-500 dark:text-slate-400">{stat.label}</dt>
+                  <dd className="mt-1 text-2xl font-bold text-slate-950 dark:text-white">{stat.value}</dd>
+                </div>
+              ))}
+            </dl>
           </motion.div>
 
-          <motion.div
-            {...imageAnimation}
-            className="relative h-[400px] w-full"
-            style={{ willChange: 'transform, opacity' }}
-          >
-            <div className="absolute inset-0 bg-gradient-to-r from-blue-500 to-purple-500 rounded-2xl opacity-10"></div>
-            <div className="absolute inset-0 flex items-center justify-center rounded-2xl">
-              <div
-                className="w-full h-full bg-white/10 rounded-xl backdrop-blur-lg p-4 flex flex-col items-center justify-center cursor-pointer"
-                onMouseMove={handleMouseMove}
-                onMouseLeave={handleMouseLeave}
-                onClick={handleStickerClick}
-              >
-                <div className="w-24 h-24 bg-gradient-to-br from-cyan-300 to-blue-600 rounded-full border-4 border-white shadow-lg flex items-center justify-center">
-                  <div className="relative w-8 h-8 bg-white rounded-full border-2 border-slate-600" style={{ transform: `translate(${eyeOffset.x}px, ${eyeOffset.y}px)` }}></div>
-                  <div className="relative w-8 h-8 bg-white rounded-full border-2 border-slate-600 ml-3" style={{ transform: `translate(${eyeOffset.x}px, ${eyeOffset.y}px)` }}></div>
+          <motion.div {...visualAnimation} className="relative">
+            <div className="overflow-hidden rounded-lg border border-slate-200 bg-white shadow-2xl shadow-slate-900/10 dark:border-slate-800 dark:bg-slate-900 dark:shadow-black/30">
+              <div className="flex items-center justify-between border-b border-slate-200 bg-slate-50 px-4 py-3 dark:border-slate-800 dark:bg-slate-950">
+                <div className="flex gap-2">
+                  <span className="h-3 w-3 rounded-full bg-red-400" />
+                  <span className="h-3 w-3 rounded-full bg-amber-400" />
+                  <span className="h-3 w-3 rounded-full bg-emerald-400" />
                 </div>
-                <p className="text-white font-semibold mt-3">{greeting}</p>
+                <span className="text-xs font-semibold uppercase tracking-[0.2em] text-slate-500 dark:text-slate-400">
+                  Portfolio Preview
+                </span>
+              </div>
+
+              <div className="bg-slate-950 p-3">
+                <img
+                  src="/portfolio-preview.png"
+                  alt="Screenshot preview of Sonalkumar Singh portfolio website"
+                  className="aspect-[16/9] w-full rounded-md border border-white/10 object-cover"
+                  loading="eager"
+                />
+              </div>
+
+              <div className="grid grid-cols-1 divide-y divide-slate-200 text-sm dark:divide-slate-800 sm:grid-cols-3 sm:divide-x sm:divide-y-0">
+                {[
+                  'Responsive UI',
+                  'Clean APIs',
+                  'Deploy-ready',
+                ].map((item) => (
+                  <div key={item} className="flex items-center gap-2 px-4 py-4 text-slate-700 dark:text-slate-200">
+                    <FiCheckCircle className="h-4 w-4 text-emerald-500" />
+                    <span className="font-semibold">{item}</span>
+                  </div>
+                ))}
               </div>
             </div>
           </motion.div>

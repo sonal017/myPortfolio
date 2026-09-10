@@ -57,28 +57,28 @@ function App() {
   return (
     <div className="App">
       <Navbar theme={theme} toggleTheme={toggleTheme} />
-      <main className="bg-gray-50 dark:bg-slate-900">
+      <main className="bg-white dark:bg-slate-950">
         <section id="home" className="bg-white dark:bg-slate-950">
           <Suspense fallback={<SectionLoader />}>
             <Header />
           </Suspense>
         </section>
-        <section id="about" className="py-12 bg-gray-50 dark:bg-slate-900">
+        <section id="about" className="bg-slate-50 py-20 dark:bg-slate-950">
           <Suspense fallback={<SectionLoader />}>
             <About />
           </Suspense>
         </section>
-        <section id="skills" className="py-20 bg-white dark:bg-slate-950">
+        <section id="skills" className="bg-white py-20 dark:bg-slate-900">
           <Suspense fallback={<SectionLoader />}>
             <Skills />
           </Suspense>
         </section>
-        <section id="projects" className="py-20 bg-gray-50 dark:bg-slate-900">
+        <section id="projects" className="bg-slate-50 py-20 dark:bg-slate-950">
           <Suspense fallback={<SectionLoader />}>
             <Projects />
           </Suspense>
         </section>
-        <section id="contact" className="py-20 bg-white dark:bg-slate-950">
+        <section id="contact" className="bg-white py-20 dark:bg-slate-900">
           <Suspense fallback={<SectionLoader />}>
             <Contact />
           </Suspense>
