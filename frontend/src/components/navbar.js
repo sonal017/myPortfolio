@@ -1,7 +1,6 @@
 import React, { useState, memo, useCallback } from 'react';
 import { FaGithub, FaLinkedin, FaInstagram } from 'react-icons/fa';
 import { FiMenu, FiMoon, FiSun, FiX } from 'react-icons/fi';
-import { Link } from 'react-scroll';
 
 const Navbar = memo(({ theme = 'light', toggleTheme = () => {} }) => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -43,10 +42,8 @@ const Navbar = memo(({ theme = 'light', toggleTheme = () => {} }) => {
     <nav className="fixed inset-x-0 top-0 z-50 border-b border-slate-200/80 bg-white/90 backdrop-blur-xl shadow-sm dark:border-slate-800 dark:bg-slate-950/90">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <div className="flex h-16 items-center justify-between">
-          <Link
-            to="home"
-            smooth
-            duration={500}
+          <a
+            href="#home"
             className="group flex cursor-pointer items-center gap-3"
             onClick={() => setIsMenuOpen(false)}
           >
@@ -58,20 +55,17 @@ const Navbar = memo(({ theme = 'light', toggleTheme = () => {} }) => {
             <span className="text-lg font-bold tracking-tight text-slate-950 dark:text-white">
               Sonalkumar Singh
             </span>
-          </Link>
+          </a>
 
           <div className="hidden items-center gap-1 md:flex">
             {menuItems.map((item) => (
-              <Link
+              <a
                 key={item.name}
-                to={item.to}
-                smooth
-                duration={500}
-                offset={-72}
+                href={`#${item.to}`}
                 className="cursor-pointer rounded-md px-3 py-2 text-sm font-medium text-slate-600 transition-colors hover:bg-slate-100 hover:text-slate-950 dark:text-slate-300 dark:hover:bg-slate-900 dark:hover:text-white"
               >
                 {item.name}
-              </Link>
+              </a>
             ))}
           </div>
 
@@ -125,17 +119,14 @@ const Navbar = memo(({ theme = 'light', toggleTheme = () => {} }) => {
         <div className="border-t border-slate-200 bg-white px-4 py-4 shadow-lg dark:border-slate-800 dark:bg-slate-950 md:hidden">
           <div className="space-y-1">
             {menuItems.map((item) => (
-              <Link
+              <a
                 key={item.name}
-                to={item.to}
-                smooth
-                duration={500}
-                offset={-72}
+                href={`#${item.to}`}
                 className="block cursor-pointer rounded-md px-3 py-3 text-base font-semibold text-slate-700 transition-colors hover:bg-slate-100 hover:text-slate-950 dark:text-slate-200 dark:hover:bg-slate-900 dark:hover:text-white"
                 onClick={() => setIsMenuOpen(false)}
               >
                 {item.name}
-              </Link>
+              </a>
             ))}
           </div>
 

@@ -1,6 +1,5 @@
-import React, { memo } from 'react';
+import React, { memo, useCallback } from 'react';
 import { motion, useReducedMotion } from 'framer-motion';
-import { Link } from 'react-scroll';
 import { FiArrowRight, FiCheckCircle, FiDownload, FiMail } from 'react-icons/fi';
 import { SiMongodb, SiNodedotjs, SiReact, SiTailwindcss } from 'react-icons/si';
 
@@ -31,10 +30,25 @@ const Header = memo(() => {
   ];
 
   const stats = [
-    { value: '4', label: 'Featured projects' },
+    { value: '6', label: 'Featured projects' },
     { value: '1+ yr', label: 'Hands-on experience' },
     { value: 'MERN', label: 'Primary stack' },
   ];
+
+  const handleSectionClick = useCallback((event, sectionId) => {
+    event.preventDefault();
+
+    const target = document.getElementById(sectionId);
+    if (!target) {
+      return;
+    }
+
+    window.history.pushState(null, '', `#${sectionId}`);
+    target.scrollIntoView({
+      behavior: shouldReduceMotion ? 'auto' : 'smooth',
+      block: 'start',
+    });
+  }, [shouldReduceMotion]);
 
   return (
     <div className="relative min-h-screen overflow-hidden bg-white pt-28 dark:bg-slate-950 sm:pt-32">
@@ -69,20 +83,19 @@ const Header = memo(() => {
             </div>
 
             <div className="mt-9 flex flex-col gap-4 sm:flex-row sm:flex-wrap">
-              <Link to="projects" smooth duration={500} offset={-72} className="w-full sm:w-auto">
-                <motion.button
-                  whileHover={shouldReduceMotion ? {} : { y: -2 }}
-                  whileTap={shouldReduceMotion ? {} : { scale: 0.98 }}
-                  className="inline-flex w-full items-center justify-center gap-2 rounded-md bg-slate-950 px-6 py-3 text-base font-semibold text-white shadow-lg shadow-slate-900/15 transition-colors hover:bg-slate-800 dark:bg-white dark:text-slate-950 dark:hover:bg-slate-200 sm:w-auto"
-                  type="button"
-                >
-                  View Projects
-                  <FiArrowRight className="h-5 w-5" />
-                </motion.button>
-              </Link>
+              <motion.a
+                href="#projects"
+                onClick={(event) => handleSectionClick(event, 'projects')}
+                whileHover={shouldReduceMotion ? {} : { y: -2 }}
+                whileTap={shouldReduceMotion ? {} : { scale: 0.98 }}
+                className="inline-flex w-full items-center justify-center gap-2 rounded-md bg-slate-950 px-6 py-3 text-base font-semibold text-white shadow-lg shadow-slate-900/15 transition-colors hover:bg-slate-800 dark:bg-white dark:text-slate-950 dark:hover:bg-slate-200 sm:w-auto"
+              >
+                View Projects
+                <FiArrowRight className="h-5 w-5" />
+              </motion.a>
 
               <motion.a
-                href="/Sonalkumar_CV2026.pdf"
+                href="/Sonalkumar_Singh_CV_2026.pdf"
                 download
                 whileHover={shouldReduceMotion ? {} : { y: -2 }}
                 whileTap={shouldReduceMotion ? {} : { scale: 0.98 }}
@@ -92,17 +105,16 @@ const Header = memo(() => {
                 Download CV
               </motion.a>
 
-              <Link to="contact" smooth duration={500} offset={-72} className="w-full sm:w-auto">
-                <motion.button
-                  whileHover={shouldReduceMotion ? {} : { y: -2 }}
-                  whileTap={shouldReduceMotion ? {} : { scale: 0.98 }}
-                  className="inline-flex w-full items-center justify-center gap-2 rounded-md px-4 py-3 text-base font-semibold text-slate-600 transition-colors hover:bg-slate-100 hover:text-slate-950 dark:text-slate-300 dark:hover:bg-slate-900 dark:hover:text-white sm:w-auto"
-                  type="button"
-                >
-                  <FiMail className="h-5 w-5" />
-                  Contact Me
-                </motion.button>
-              </Link>
+              <motion.a
+                href="#contact"
+                onClick={(event) => handleSectionClick(event, 'contact')}
+                whileHover={shouldReduceMotion ? {} : { y: -2 }}
+                whileTap={shouldReduceMotion ? {} : { scale: 0.98 }}
+                className="inline-flex w-full items-center justify-center gap-2 rounded-md px-4 py-3 text-base font-semibold text-slate-600 transition-colors hover:bg-slate-100 hover:text-slate-950 dark:text-slate-300 dark:hover:bg-slate-900 dark:hover:text-white sm:w-auto"
+              >
+                <FiMail className="h-5 w-5" />
+                Contact Me
+              </motion.a>
             </div>
 
             <dl className="mt-10 grid max-w-xl grid-cols-3 gap-3">

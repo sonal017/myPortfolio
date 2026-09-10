@@ -1,4 +1,4 @@
-import React, { useState, memo, useCallback } from 'react';
+import React, { useState, memo, useCallback, useEffect, useRef } from 'react';
 import { motion, useReducedMotion } from 'framer-motion';
 import {
   FiCheckCircle,
@@ -21,10 +21,14 @@ const Contact = memo(() => {
   });
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitStatus, setSubmitStatus] = useState({ type: null, message: '' });
+  const closeButtonRef = useRef(null);
+  const modalRef = useRef(null);
+  const lastFocusedElementRef = useRef(null);
 
   const handleSubmit = useCallback(
     async (e) => {
       e.preventDefault();
+      lastFocusedElementRef.current = document.activeElement;
       setIsSubmitting(true);
       setSubmitStatus({ type: null, message: '' });
 
@@ -131,15 +135,87 @@ const Contact = memo(() => {
         transition: { duration: 0.5, ease: 'easeOut' },
       };
 
+  const closeSuccessModal = useCallback(() => {
+    setSubmitStatus({ type: null, message: '' });
+  }, []);
+
+  useEffect(() => {
+    if (submitStatus.type !== 'success') {
+      return undefined;
+    }
+
+    const previouslyFocusedElement = lastFocusedElementRef.current;
+    const focusableSelector = [
+      'a[href]',
+      'button:not([disabled])',
+      'input:not([disabled])',
+      'textarea:not([disabled])',
+      'select:not([disabled])',
+      '[tabindex]:not([tabindex="-1"])',
+    ].join(',');
+
+    const animationFrame = window.requestAnimationFrame(() => {
+      closeButtonRef.current?.focus();
+    });
+
+    const handleKeyDown = (event) => {
+      if (event.key === 'Escape') {
+        event.preventDefault();
+        closeSuccessModal();
+        return;
+      }
+
+      if (event.key !== 'Tab' || !modalRef.current) {
+        return;
+      }
+
+      const focusableElements = Array.from(modalRef.current.querySelectorAll(focusableSelector)).filter((element) =>
+        element instanceof HTMLElement && element.offsetParent !== null,
+      );
+
+      if (!focusableElements.length) {
+        event.preventDefault();
+        return;
+      }
+
+      const firstElement = focusableElements[0];
+      const lastElement = focusableElements[focusableElements.length - 1];
+
+      if (event.shiftKey && document.activeElement === firstElement) {
+        event.preventDefault();
+        lastElement.focus();
+      } else if (!event.shiftKey && document.activeElement === lastElement) {
+        event.preventDefault();
+        firstElement.focus();
+      }
+    };
+
+    document.addEventListener('keydown', handleKeyDown);
+
+    return () => {
+      window.cancelAnimationFrame(animationFrame);
+      document.removeEventListener('keydown', handleKeyDown);
+
+      if (previouslyFocusedElement instanceof HTMLElement && document.contains(previouslyFocusedElement)) {
+        previouslyFocusedElement.focus();
+      }
+    };
+  }, [closeSuccessModal, submitStatus.type]);
+
   const SuccessModal = () => (
     <motion.div
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       exit={{ opacity: 0 }}
       className="fixed inset-0 z-50 flex items-center justify-center bg-slate-950/70 p-4 backdrop-blur-sm"
-      onClick={() => setSubmitStatus({ type: null, message: '' })}
+      onClick={closeSuccessModal}
     >
       <motion.div
+        ref={modalRef}
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="success-modal-title"
+        aria-describedby="success-modal-description"
         initial={{ scale: 0.96, opacity: 0 }}
         animate={{ scale: 1, opacity: 1 }}
         exit={{ scale: 0.96, opacity: 0 }}
@@ -148,7 +224,8 @@ const Contact = memo(() => {
         onClick={(e) => e.stopPropagation()}
       >
         <button
-          onClick={() => setSubmitStatus({ type: null, message: '' })}
+          ref={closeButtonRef}
+          onClick={closeSuccessModal}
           className="absolute right-4 top-4 rounded-md p-2 text-slate-400 transition-colors hover:bg-slate-100 hover:text-slate-700 dark:hover:bg-slate-800 dark:hover:text-slate-200"
           aria-label="Close"
           type="button"
@@ -160,13 +237,15 @@ const Contact = memo(() => {
           <FiCheckCircle className="h-9 w-9" />
         </div>
 
-        <h3 className="mt-6 text-2xl font-bold text-slate-950 dark:text-white">Message received</h3>
-        <p className="mt-3 leading-7 text-slate-600 dark:text-slate-300">
+        <h3 id="success-modal-title" className="mt-6 text-2xl font-bold text-slate-950 dark:text-white">
+          Message received
+        </h3>
+        <p id="success-modal-description" className="mt-3 leading-7 text-slate-600 dark:text-slate-300">
           Thanks for reaching out. I&apos;ll reply as soon as possible.
         </p>
 
         <button
-          onClick={() => setSubmitStatus({ type: null, message: '' })}
+          onClick={closeSuccessModal}
           className="mt-6 w-full rounded-md bg-slate-950 px-4 py-3 font-semibold text-white transition-colors hover:bg-slate-800 dark:bg-white dark:text-slate-950 dark:hover:bg-slate-200"
           type="button"
         >
@@ -261,7 +340,7 @@ const Contact = memo(() => {
                 value={formData.name}
                 onChange={handleChange}
                 className={inputClassName}
-                placeholder="Your name"
+                placeholder="Your name…"
                 required
               />
             </div>
@@ -277,7 +356,7 @@ const Contact = memo(() => {
                 value={formData.email}
                 onChange={handleChange}
                 className={inputClassName}
-                placeholder="you@example.com"
+                placeholder="you@example.com…"
                 required
               />
             </div>
@@ -293,13 +372,17 @@ const Contact = memo(() => {
                 onChange={handleChange}
                 rows={6}
                 className={inputClassName}
-                placeholder="Tell me about the project, role, or question..."
+                placeholder="Tell me about the project, role, or question…"
                 required
               />
             </div>
 
             {submitStatus.message && submitStatus.type === 'error' && (
-              <div className="rounded-md border border-red-200 bg-red-50 p-3 text-sm font-medium text-red-700 dark:border-red-900/70 dark:bg-red-950/40 dark:text-red-300">
+              <div
+                role="alert"
+                aria-live="polite"
+                className="rounded-md border border-red-200 bg-red-50 p-3 text-sm font-medium text-red-700 dark:border-red-900/70 dark:bg-red-950/40 dark:text-red-300"
+              >
                 {submitStatus.message}
               </div>
             )}
@@ -309,12 +392,13 @@ const Contact = memo(() => {
               whileTap={shouldReduceMotion ? {} : { scale: 0.98 }}
               type="submit"
               disabled={isSubmitting}
+              aria-busy={isSubmitting}
               className={`inline-flex w-full items-center justify-center gap-2 rounded-md bg-slate-950 px-5 py-3.5 font-semibold text-white shadow-lg shadow-slate-900/15 transition-colors hover:bg-slate-800 dark:bg-white dark:text-slate-950 dark:hover:bg-slate-200 ${
                 isSubmitting ? 'cursor-not-allowed opacity-70' : ''
               }`}
             >
               <FiSend className="h-5 w-5" />
-              {isSubmitting ? 'Sending...' : 'Send Message'}
+              {isSubmitting ? 'Sending…' : 'Send Message'}
             </motion.button>
           </form>
         </motion.div>

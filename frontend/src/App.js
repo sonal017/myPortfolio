@@ -56,8 +56,11 @@ function App() {
 
   return (
     <div className="App">
+      <a href="#main-content" className="skip-link">
+        Skip to content
+      </a>
       <Navbar theme={theme} toggleTheme={toggleTheme} />
-      <main className="bg-white dark:bg-slate-950">
+      <main id="main-content" tabIndex="-1" className="bg-white dark:bg-slate-950">
         <section id="home" className="bg-white dark:bg-slate-950">
           <Suspense fallback={<SectionLoader />}>
             <Header />

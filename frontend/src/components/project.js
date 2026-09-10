@@ -18,7 +18,7 @@ const ProjectCard = memo(({ project, index }) => {
   return (
     <motion.article
       {...animationProps}
-      className="group flex h-full flex-col overflow-hidden rounded-lg border border-slate-200 bg-white shadow-sm transition-all duration-300 hover:-translate-y-1 hover:shadow-xl hover:shadow-slate-900/10 dark:border-slate-800 dark:bg-slate-900 dark:hover:shadow-black/25"
+      className="group flex h-full flex-col overflow-hidden rounded-lg border border-slate-200 bg-white shadow-sm transition-[box-shadow,transform] duration-300 hover:-translate-y-1 hover:shadow-xl hover:shadow-slate-900/10 dark:border-slate-800 dark:bg-slate-900 dark:hover:shadow-black/25"
     >
       <div className="relative aspect-[16/9] overflow-hidden bg-slate-100 dark:bg-slate-800">
         {!imageError ? (
@@ -171,8 +171,9 @@ const Projects = () => {
       description:
         'Legend of Zelda-inspired role-playing game with character movement, enemy AI, collision detection, and level progression.',
       outcome: 'Built core gameplay mechanics in Python, including movement systems, enemy behavior, and map progression.',
-      image: '/rpg-preview.svg',
+      image: '/rpg-preview.png',
       technologies: ['Python', 'Pygame', 'Enemy AI', 'Collision Detection', 'Level Progression'],
+      liveDemo: 'https://2-d-rpg-game.vercel.app/',
       status: 'Academic Project',
     },
   ];

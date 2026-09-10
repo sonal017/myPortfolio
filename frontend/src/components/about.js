@@ -9,8 +9,8 @@ const About = memo(() => {
   const stats = [
     {
       label: 'Featured Projects',
-      value: '4',
-      description: 'React, Node.js, API, commerce, and weather UI builds',
+      value: '6',
+      description: 'Shopify, AI, scheduling, PDF, and full-stack builds',
       icon: <FiCode className="h-6 w-6" />,
     },
     {
@@ -133,7 +133,7 @@ const About = memo(() => {
           </div>
 
           <a
-            href="/Sonalkumar_CV2026.pdf"
+            href="/Sonalkumar_Singh_CV_2026.pdf"
             download
             className="mt-8 inline-flex items-center gap-2 rounded-md bg-slate-950 px-5 py-3 font-semibold text-white shadow-lg shadow-slate-900/15 transition-colors hover:bg-slate-800 dark:bg-white dark:text-slate-950 dark:hover:bg-slate-200"
           >
