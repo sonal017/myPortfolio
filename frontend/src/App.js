@@ -1,94 +1,40 @@
-import React, { useEffect, useState, Suspense, lazy } from 'react';
+import React, { useEffect, useState } from 'react';
+import { FiArrowUp } from 'react-icons/fi';
 import './App.css';
 import Navbar from './components/navbar';
+import Header from './components/header';
+import Projects from './components/project';
+import About from './components/about';
+import Skills from './components/skill';
+import Contact from './components/contact';
 
-// Lazy load components for code splitting and better performance
-const Header = lazy(() => import('./components/header'));
-const About = lazy(() => import('./components/about'));
-const Skills = lazy(() => import('./components/skill'));
-const Projects = lazy(() => import('./components/project'));
-const Contact = lazy(() => import('./components/contact'));
-
-// Loading fallback component
-const SectionLoader = () => (
-  <div className="flex items-center justify-center min-h-[400px]">
-    <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600"></div>
-  </div>
-);
-
-function App() {
-  // Theme state: 'light' or 'dark'. Persist in localStorage and sync to <html data-theme>
+export default function App({ staticMode = false }) {
   const [theme, setTheme] = useState(() => {
+    if (staticMode || typeof window === 'undefined') return 'light';
     try {
-      return localStorage.getItem('theme') || 'light';
-    } catch (e) {
-      return 'light';
-    }
+      const saved = localStorage.getItem('theme');
+      if (saved === 'light' || saved === 'dark') return saved;
+    } catch (error) { /* Storage can be unavailable in private browsing. */ }
+    return window.matchMedia?.('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
   });
 
   useEffect(() => {
-    try {
-      document.documentElement.setAttribute('data-theme', theme);
-      localStorage.setItem('theme', theme);
-    } catch (e) {
-      /* ignore */
-    }
+    document.documentElement.setAttribute('data-theme', theme);
+    try { localStorage.setItem('theme', theme); } catch (error) { /* Theme still works without persistence. */ }
   }, [theme]);
 
-  // Reduce motion for accessibility
-  useEffect(() => {
-    const mediaQuery = window.matchMedia('(prefers-reduced-motion: reduce)');
-    const handleChange = (e) => {
-      if (e.matches) {
-        document.documentElement.setAttribute('data-reduced-motion', 'true');
-      } else {
-        document.documentElement.removeAttribute('data-reduced-motion');
-      }
-    };
-    
-    handleChange(mediaQuery);
-    mediaQuery.addEventListener('change', handleChange);
-    
-    return () => mediaQuery.removeEventListener('change', handleChange);
-  }, []);
-
-  const toggleTheme = () => setTheme((t) => (t === 'light' ? 'dark' : 'light'));
-
   return (
-    <div className="App">
-      <a href="#main-content" className="skip-link">
-        Skip to content
-      </a>
-      <Navbar theme={theme} toggleTheme={toggleTheme} />
-      <main id="main-content" tabIndex="-1" className="bg-white dark:bg-slate-950">
-        <section id="home" className="bg-white dark:bg-slate-950">
-          <Suspense fallback={<SectionLoader />}>
-            <Header />
-          </Suspense>
-        </section>
-        <section id="about" className="bg-slate-50 py-20 dark:bg-slate-950">
-          <Suspense fallback={<SectionLoader />}>
-            <About />
-          </Suspense>
-        </section>
-        <section id="skills" className="bg-white py-20 dark:bg-slate-900">
-          <Suspense fallback={<SectionLoader />}>
-            <Skills />
-          </Suspense>
-        </section>
-        <section id="projects" className="bg-slate-50 py-20 dark:bg-slate-950">
-          <Suspense fallback={<SectionLoader />}>
-            <Projects />
-          </Suspense>
-        </section>
-        <section id="contact" className="bg-white py-20 dark:bg-slate-900">
-          <Suspense fallback={<SectionLoader />}>
-            <Contact />
-          </Suspense>
-        </section>
+    <div className={'App' + (staticMode ? ' static-portfolio' : '')}>
+      <a href="#main-content" className="skip-link">Skip to content</a>
+      <Navbar staticMode={staticMode} theme={theme} toggleTheme={() => setTheme((value) => value === 'light' ? 'dark' : 'light')} />
+      <main id="main-content" tabIndex="-1">
+        <section id="home" aria-label="Introduction"><Header /></section>
+        <section id="projects" className="section work-section" aria-label="Selected projects"><Projects /></section>
+        <section id="about" className="section section-tinted" aria-label="About and experience"><About /></section>
+        <section id="skills" className="section" aria-label="Skills"><Skills /></section>
+        <section id="contact" className="section section-tinted" aria-label="Contact"><Contact staticMode={staticMode} /></section>
       </main>
+      <footer className="site-footer page-width"><p>Sonalkumar Singh <span>Full-stack developer</span></p><a href="#home" className="text-link">Back to top<FiArrowUp aria-hidden="true" /></a></footer>
     </div>
   );
 }
-
-export default App;

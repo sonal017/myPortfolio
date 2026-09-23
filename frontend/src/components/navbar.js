@@ -1,155 +1,86 @@
-import React, { useState, memo, useCallback } from 'react';
-import { FaGithub, FaLinkedin, FaInstagram } from 'react-icons/fa';
-import { FiMenu, FiMoon, FiSun, FiX } from 'react-icons/fi';
+import React, { useEffect, useRef, useState } from 'react';
+import { FiArrowUpRight, FiGithub, FiMenu, FiMoon, FiSun, FiX } from 'react-icons/fi';
 
-const Navbar = memo(({ theme = 'light', toggleTheme = () => {} }) => {
+const menuItems = [
+  { name: 'Work', to: 'projects' },
+  { name: 'About', to: 'about' },
+  { name: 'Skills', to: 'skills' },
+  { name: 'Contact', to: 'contact' },
+];
+
+export default function Navbar({ theme, toggleTheme, staticMode = false }) {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [activeSection, setActiveSection] = useState('home');
+  const menuButton = useRef(null);
+  const navRef = useRef(null);
 
-  const toggleMenu = useCallback(() => {
-    setIsMenuOpen((prev) => !prev);
+  useEffect(() => {
+    let frame;
+    const updateSection = () => {
+      cancelAnimationFrame(frame);
+      frame = requestAnimationFrame(() => {
+        const sections = [...document.querySelectorAll('main > section')];
+        const atBottom = window.scrollY > 0 && window.scrollY + window.innerHeight >= document.documentElement.scrollHeight - 2;
+        const current = atBottom ? sections[sections.length - 1] : sections.filter((section) => section.getBoundingClientRect().top <= 180).pop();
+        setActiveSection(current?.id || 'home');
+      });
+    };
+    updateSection();
+    window.addEventListener('scroll', updateSection, { passive: true });
+    window.addEventListener('resize', updateSection);
+    return () => {
+      window.removeEventListener('scroll', updateSection);
+      window.removeEventListener('resize', updateSection);
+      cancelAnimationFrame(frame);
+    };
   }, []);
 
-  const menuItems = [
-    { name: 'Home', to: 'home' },
-    { name: 'About', to: 'about' },
-    { name: 'Skills', to: 'skills' },
-    { name: 'Projects', to: 'projects' },
-    { name: 'Contact', to: 'contact' },
-  ];
+  useEffect(() => {
+    if (!isMenuOpen) return undefined;
+    const onKeyDown = (event) => {
+      if (event.key === 'Escape') {
+        setIsMenuOpen(false);
+        menuButton.current?.focus();
+      }
+    };
+    const onPointerDown = (event) => {
+      if (!navRef.current?.contains(event.target)) setIsMenuOpen(false);
+    };
+    const desktop = window.matchMedia('(min-width: 1024px)');
+    const onResize = (event) => { if (event.matches) setIsMenuOpen(false); };
+    document.addEventListener('keydown', onKeyDown);
+    document.addEventListener('pointerdown', onPointerDown);
+    desktop.addEventListener('change', onResize);
+    return () => {
+      document.removeEventListener('keydown', onKeyDown);
+      document.removeEventListener('pointerdown', onPointerDown);
+      desktop.removeEventListener('change', onResize);
+    };
+  }, [isMenuOpen]);
 
-  const socialLinks = [
-    {
-      label: 'GitHub',
-      icon: <FaGithub className="h-5 w-5" />,
-      url: 'https://github.com/sonal017',
-    },
-    {
-      label: 'LinkedIn',
-      icon: <FaLinkedin className="h-5 w-5" />,
-      url: 'https://www.linkedin.com/in/sonalkumar-singh-a8b230294',
-    },
-    {
-      label: 'Instagram',
-      icon: <FaInstagram className="h-5 w-5" />,
-      url: 'https://www.instagram.com/sonal_._singh_',
-    },
-  ];
-
+  const closeMenu = () => setIsMenuOpen(false);
   const ThemeIcon = theme === 'light' ? FiMoon : FiSun;
-  const MenuIcon = isMenuOpen ? FiX : FiMenu;
 
   return (
-    <nav className="fixed inset-x-0 top-0 z-50 border-b border-slate-200/80 bg-white/90 backdrop-blur-xl shadow-sm dark:border-slate-800 dark:bg-slate-950/90">
-      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-        <div className="flex h-16 items-center justify-between">
-          <a
-            href="#home"
-            className="group flex cursor-pointer items-center gap-3"
-            onClick={() => setIsMenuOpen(false)}
-          >
-            <img
-              src="/logo192.png"
-              alt="Sonalkumar Singh logo"
-              className="h-10 w-10 rounded-md bg-white object-cover shadow-sm ring-1 ring-slate-200 dark:ring-slate-800"
-            />
-            <span className="text-lg font-bold tracking-tight text-slate-950 dark:text-white">
-              Sonalkumar Singh
-            </span>
-          </a>
-
-          <div className="hidden items-center gap-1 md:flex">
-            {menuItems.map((item) => (
-              <a
-                key={item.name}
-                href={`#${item.to}`}
-                className="cursor-pointer rounded-md px-3 py-2 text-sm font-medium text-slate-600 transition-colors hover:bg-slate-100 hover:text-slate-950 dark:text-slate-300 dark:hover:bg-slate-900 dark:hover:text-white"
-              >
-                {item.name}
-              </a>
-            ))}
-          </div>
-
-          <div className="hidden items-center gap-2 md:flex">
-            {socialLinks.map((link) => (
-              <a
-                key={link.label}
-                href={link.url}
-                target="_blank"
-                rel="noopener noreferrer"
-                aria-label={`Open ${link.label}`}
-                className="rounded-md p-2 text-slate-600 transition-colors hover:bg-slate-100 hover:text-slate-950 dark:text-slate-300 dark:hover:bg-slate-900 dark:hover:text-white"
-              >
-                {link.icon}
-              </a>
-            ))}
-
-            <button
-              onClick={toggleTheme}
-              aria-label="Toggle color theme"
-              className="rounded-md p-2 text-slate-600 transition-colors hover:bg-slate-100 hover:text-slate-950 dark:text-slate-300 dark:hover:bg-slate-900 dark:hover:text-white"
-              type="button"
-            >
-              <ThemeIcon className="h-5 w-5" />
-            </button>
-          </div>
-
-          <div className="flex items-center gap-2 md:hidden">
-            <button
-              onClick={toggleTheme}
-              aria-label="Toggle color theme"
-              className="rounded-md p-2 text-slate-700 transition-colors hover:bg-slate-100 dark:text-slate-300 dark:hover:bg-slate-900"
-              type="button"
-            >
-              <ThemeIcon className="h-6 w-6" />
-            </button>
-            <button
-              onClick={toggleMenu}
-              aria-label="Toggle navigation menu"
-              aria-expanded={isMenuOpen}
-              className="rounded-md p-2 text-slate-700 transition-colors hover:bg-slate-100 dark:text-slate-300 dark:hover:bg-slate-900"
-              type="button"
-            >
-              <MenuIcon className="h-7 w-7" />
-            </button>
-          </div>
+    <nav className={'site-nav' + (staticMode ? ' static-site-nav' : '')} ref={navRef} aria-label="Main navigation">
+      <div className="page-width nav-inner">
+        <a href="#home" className="brand" onClick={closeMenu} aria-label="Sonalkumar Singh, home">
+          <img src="/brand-mark.png?v=ss-blue" alt="" width="44" height="44" />
+          <span>Sonalkumar Singh</span>
+        </a>
+        <div className={'desktop-links' + (staticMode ? ' static-nav-links' : '')}>
+          {menuItems.map((item) => <a key={item.to} href={'#' + item.to} aria-current={activeSection === item.to ? 'location' : undefined}>{item.name}</a>)}
         </div>
+        {!staticMode && <div className="nav-actions">
+          <a className="icon-button nav-github" href="https://github.com/sonal017" target="_blank" rel="noopener noreferrer" aria-label="Visit GitHub" data-tooltip="GitHub"><FiGithub aria-hidden="true" /></a>
+          <button className="icon-button" type="button" onClick={toggleTheme} aria-label={'Switch to ' + (theme === 'light' ? 'dark' : 'light') + ' theme'} data-tooltip={(theme === 'light' ? 'Dark' : 'Light') + ' theme'}><ThemeIcon aria-hidden="true" /></button>
+          <button ref={menuButton} className="icon-button menu-toggle" type="button" onClick={() => setIsMenuOpen((open) => !open)} aria-label={isMenuOpen ? 'Close navigation menu' : 'Open navigation menu'} aria-expanded={isMenuOpen} aria-controls="mobile-navigation">{isMenuOpen ? <FiX aria-hidden="true" /> : <FiMenu aria-hidden="true" />}</button>
+        </div>}
       </div>
-
-      {isMenuOpen && (
-        <div className="border-t border-slate-200 bg-white px-4 py-4 shadow-lg dark:border-slate-800 dark:bg-slate-950 md:hidden">
-          <div className="space-y-1">
-            {menuItems.map((item) => (
-              <a
-                key={item.name}
-                href={`#${item.to}`}
-                className="block cursor-pointer rounded-md px-3 py-3 text-base font-semibold text-slate-700 transition-colors hover:bg-slate-100 hover:text-slate-950 dark:text-slate-200 dark:hover:bg-slate-900 dark:hover:text-white"
-                onClick={() => setIsMenuOpen(false)}
-              >
-                {item.name}
-              </a>
-            ))}
-          </div>
-
-          <div className="mt-4 flex gap-2 border-t border-slate-200 pt-4 dark:border-slate-800">
-            {socialLinks.map((link) => (
-              <a
-                key={link.label}
-                href={link.url}
-                target="_blank"
-                rel="noopener noreferrer"
-                aria-label={`Open ${link.label}`}
-                className="rounded-md bg-slate-100 p-3 text-slate-700 transition-colors hover:text-slate-950 dark:bg-slate-900 dark:text-slate-300 dark:hover:text-white"
-              >
-                {link.icon}
-              </a>
-            ))}
-          </div>
-        </div>
-      )}
+      {isMenuOpen && <div id="mobile-navigation" className="mobile-navigation page-width">
+        {menuItems.map((item) => <a key={item.to} href={'#' + item.to} onClick={closeMenu} aria-current={activeSection === item.to ? 'location' : undefined}>{item.name}<FiArrowUpRight aria-hidden="true" /></a>)}
+        <a href="https://github.com/sonal017" target="_blank" rel="noopener noreferrer" onClick={closeMenu}>GitHub<FiGithub aria-hidden="true" /></a>
+      </div>}
     </nav>
   );
-});
-
-Navbar.displayName = 'Navbar';
-
-export default Navbar;
+}

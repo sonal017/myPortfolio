@@ -3,23 +3,23 @@
   "name": "Sonalkumar Singh Portfolio",
   "icons": [
     {
-      "src": "favicon.png",
+      "src": "favicon.png?v=ss-blue",
       "sizes": "64x64",
       "type": "image/png"
     },
     {
-      "src": "logo192.png",
+      "src": "logo192.png?v=ss-blue",
       "type": "image/png",
       "sizes": "192x192"
     },
     {
-      "src": "logo512.png",
+      "src": "logo512.png?v=ss-blue",
       "type": "image/png",
       "sizes": "512x512"
     }
   ],
   "start_url": ".",
   "display": "standalone",
-  "theme_color": "#0f172a",
+  "theme_color": "#111318",
   "background_color": "#ffffff"
 }
