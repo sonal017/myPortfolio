@@ -1,0 +1,11 @@
+{
+  "browser": {
+    "isolated": true,
+    "contextOptions": {
+      "viewport": { "width": 1440, "height": 1000 },
+      "serviceWorkers": "block"
+    }
+  },
+  "outputDir": "node_modules/.cache/playwright-cli",
+  "outputMode": "file"
+}

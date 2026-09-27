@@ -59,14 +59,26 @@ export default function Navbar({ theme, toggleTheme, staticMode = false }) {
   }, [isMenuOpen]);
 
   const closeMenu = () => setIsMenuOpen(false);
+  const handleBlur = (event) => {
+    if (!isMenuOpen || event.currentTarget.contains(event.relatedTarget)) return;
+    setIsMenuOpen(false);
+    // The browser may have scrolled the next control behind the expanded header.
+    const nextControl = event.relatedTarget;
+    requestAnimationFrame(() => {
+      if (!nextControl || nextControl !== document.activeElement || !navRef.current) return;
+      if (nextControl.getBoundingClientRect().top < navRef.current.getBoundingClientRect().bottom + 12) {
+        nextControl.scrollIntoView({ block: 'center', behavior: 'instant' });
+      }
+    });
+  };
   const ThemeIcon = theme === 'light' ? FiMoon : FiSun;
 
   return (
-    <nav className={'site-nav' + (staticMode ? ' static-site-nav' : '')} ref={navRef} aria-label="Main navigation">
+    <nav className={'site-nav' + (staticMode ? ' static-site-nav' : '')} ref={navRef} onBlur={handleBlur} aria-label="Main navigation">
       <div className="page-width nav-inner">
         <a href="#home" className="brand" onClick={closeMenu} aria-label="Sonalkumar Singh, home">
           <img src="/brand-mark.png?v=ss-blue" alt="" width="44" height="44" />
-          <span>Sonalkumar Singh</span>
+          <span translate="no">Sonalkumar Singh</span>
         </a>
         <div className={'desktop-links' + (staticMode ? ' static-nav-links' : '')}>
           {menuItems.map((item) => <a key={item.to} href={'#' + item.to} aria-current={activeSection === item.to ? 'location' : undefined}>{item.name}</a>)}

@@ -11,11 +11,11 @@ const groups = [
 export default function Skills() {
   return (
     <div className="page-width">
-      <div className="section-heading"><div><p className="eyebrow">03 / My toolkit</p><h2>The tools behind the work.</h2></div></div>
+      <div className="section-heading"><h2>My toolkit.</h2></div>
       <div className="skills-grid">
         {groups.map((group) => <div className="skill-group" key={group.title}>
-          <div className="skill-heading"><span>{group.number}</span><h3>{group.title}</h3></div>
-          <ul>{group.items.map(([name, Icon]) => <li key={name}><Icon aria-hidden="true" /><span>{name}</span></li>)}</ul>
+          <div className="skill-heading"><h3>{group.title}</h3></div>
+          <ul translate="no">{group.items.map(([name, Icon]) => <li key={name}><Icon aria-hidden="true" /><span>{name}</span></li>)}</ul>
         </div>)}
       </div>
     </div>

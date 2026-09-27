@@ -54,14 +54,13 @@ function ProjectCard({ project, index }) {
       <a className="project-preview" href={project.liveDemo} target="_blank" rel="noopener noreferrer" aria-label={'Open ' + project.title}>
         {imageError ? <span className="preview-fallback"><FiImage aria-hidden="true" />{project.title}</span> :
           <img src={project.image} alt={project.title + ' website screenshot'} width="1280" height="720" loading={index < 2 ? 'eager' : 'lazy'} decoding="async" onError={() => setImageError(true)} />}
-        <span className="preview-open" aria-hidden="true"><FiArrowUpRight /></span>
       </a>
       <div className="project-content">
         <div className="project-meta"><span>{project.category}</span><span>{project.ownership}</span></div>
-        <div className="project-title"><h3><a href={project.liveDemo} target="_blank" rel="noopener noreferrer">{project.title}</a></h3><span className="project-index" aria-hidden="true">{String(index + 1).padStart(2, '0')}</span></div>
+        <h3><a href={project.liveDemo} target="_blank" rel="noopener noreferrer" translate="no">{project.title}</a></h3>
         <p className="project-description">{project.description}</p>
         <p className="project-contribution"><span>My contribution</span>{project.contribution}</p>
-        <ul className="technology-list" aria-label={project.title + ' technologies'}>
+        <ul className="technology-list" aria-label={project.title + ' technologies'} translate="no">
           {project.technologies.map((tech) => <li key={tech}>{tech}</li>)}
         </ul>
         <div className="project-links">
@@ -77,10 +76,9 @@ export default function Projects() {
   return (
     <div className="page-width">
       <div className="section-heading work-heading">
-        <div><p className="eyebrow">01 / Selected work</p><h2>Projects in the real world.</h2></div>
-        <p className="section-aside">Company work & independent builds<span className="project-count">{String(projects.length).padStart(2, '0')}</span></p>
+        <h2 id="projects-heading">Worked Projects<span className="work-count" aria-hidden="true">{projects.length}</span></h2>
       </div>
-      <div className="project-grid">{projects.map((project, index) => <ProjectCard project={project} index={index} key={project.title} />)}</div>
+      <div id="project-list" className="project-grid">{projects.map((project, index) => <ProjectCard project={project} index={index} key={project.title} />)}</div>
     </div>
   );
 }

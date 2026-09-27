@@ -5,10 +5,11 @@ export default function About() {
   return (
     <div className="page-width about-layout">
       <div className="about-intro">
-        <p className="eyebrow">02 / About me</p>
-        <h2>A practical approach.<br />An eye for the details.</h2>
+        <p className="eyebrow">About me</p>
+        <h2>From interface to API.</h2>
         <p>I'm a full-stack developer based in Mumbai. I enjoy turning complex workflows into interfaces that feel straightforward to use.</p>
         <p>My work spans booking, AI tools, social scheduling, and document generation. I care about the details on both sides of the screen: clear interactions and dependable APIs.</p>
+        <dl className="profile-facts"><div><dt>Experience</dt><dd>1+ years</dd></div><div><dt>Based in</dt><dd>Mumbai, India</dd></div></dl>
         <a href="/Sonalkumar_Singh_CV_2026.pdf" download className="text-link"><FiDownload aria-hidden="true" />Download CV</a>
       </div>
       <div className="experience-column">

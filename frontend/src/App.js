@@ -20,6 +20,8 @@ export default function App({ staticMode = false }) {
 
   useEffect(() => {
     document.documentElement.setAttribute('data-theme', theme);
+    const pageColor = getComputedStyle(document.documentElement).getPropertyValue('--page').trim();
+    if (pageColor) document.querySelector('meta[name="theme-color"]')?.setAttribute('content', pageColor);
     try { localStorage.setItem('theme', theme); } catch (error) { /* Theme still works without persistence. */ }
   }, [theme]);
 
@@ -29,7 +31,7 @@ export default function App({ staticMode = false }) {
       <Navbar staticMode={staticMode} theme={theme} toggleTheme={() => setTheme((value) => value === 'light' ? 'dark' : 'light')} />
       <main id="main-content" tabIndex="-1">
         <section id="home" aria-label="Introduction"><Header /></section>
-        <section id="projects" className="section work-section" aria-label="Selected projects"><Projects /></section>
+        <section id="projects" className="section work-section" aria-labelledby="projects-heading"><Projects /></section>
         <section id="about" className="section section-tinted" aria-label="About and experience"><About /></section>
         <section id="skills" className="section" aria-label="Skills"><Skills /></section>
         <section id="contact" className="section section-tinted" aria-label="Contact"><Contact staticMode={staticMode} /></section>
